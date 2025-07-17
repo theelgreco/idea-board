@@ -8,6 +8,6 @@ export interface DropdownItem {
 export interface DropdownProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     id: string;
     items: DropdownItem[];
-    selectedItem: DropdownItem["value"];
+    selectedItem?: DropdownItem["value"];
     handleSelect: (value: DropdownItem["value"]) => void;
 }

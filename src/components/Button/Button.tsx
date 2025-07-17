@@ -13,7 +13,7 @@ export default function Button({ Icon, iconProps, text, iconPosition, variant, .
         <button
             {...rest}
             className={clsx(
-                "flex items-center gap-3 px-5! py-3! cursor-pointer transition-colors select-none",
+                "flex items-center gap-3 px-5! py-3! cursor-pointer transition-colors select-none disabled:opacity-50 disabled:cursor-not-allowed",
                 classNames[variant],
                 rest.className
             )}
