@@ -10,12 +10,12 @@ function App() {
     const [collections, setCollections] = useState<Collection[] | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<unknown>(null);
-    const dropdownItems: DropdownItem[] = [
-        { label: "All Ideas", value: "all" },
-        { label: "hello", value: "if" },
-    ];
+    const [dropdownItems, setDropdownItems] = useState<DropdownItem[]>([{ label: "All Ideas", value: "all" }]);
     const [selectedDropdownItem, setSelectedDropdownItem] = useState<DropdownItem["value"]>(dropdownItems[0].value);
     const addCollectionDialog = useRef<HTMLDialogElement>(null);
+
+    console.log(error);
+    console.log(collections);
 
     function toggleCollectionDialog() {
         if (addCollectionDialog.current) {
@@ -29,6 +29,12 @@ function App() {
         try {
             const response = await fetchCollections();
             setCollections(response.data);
+            setDropdownItems((prev) => [
+                ...prev,
+                ...response.data.map((el) => {
+                    return { label: el.name, value: el.name };
+                }),
+            ]);
         } catch (err: unknown) {
             setError(err);
         } finally {
@@ -37,11 +43,15 @@ function App() {
         }
     };
 
-    const addNewCollection = async () => {};
+    // const addNewCollection = async () => {};
 
     useEffect(() => {
         getCollections();
     }, []);
+
+    useEffect(() => {
+        addCollectionDialog.current?.setAttribute("closedby", "any");
+    }, [addCollectionDialog]);
 
     if (isLoading) return <p>Loading...</p>;
 
@@ -56,7 +66,7 @@ function App() {
                     selectedItem={selectedDropdownItem}
                 />
                 <Button onClick={toggleCollectionDialog} Icon={MdAdd} variant="secondary" />
-                <dialog ref={addCollectionDialog} closedby="any" className="gap-10">
+                <dialog ref={addCollectionDialog} className="gap-10">
                     <div>
                         <h1 className="text-2xl">Add a new collection</h1>
                         <h2 className="text-stone-400 mb-3!">Enter the name of the new collection</h2>
