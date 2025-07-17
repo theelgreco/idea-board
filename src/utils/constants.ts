@@ -1,0 +1,1 @@
+export const MOCK_API_DELAY_AMOUNT = 1000;

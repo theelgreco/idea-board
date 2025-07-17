@@ -1,0 +1,76 @@
+@import url("./assets/fonts/fonts.css");
+@import "tailwindcss";
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-color: var(--color-stone-800);
+        --primary-text-color: var(--color-gray-50);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --bg-color: #ffffff;
+        --primary-text-color: #0f0f0f;
+    }
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--primary-text-color);
+    font-family: "Inter";
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    max-width: 100vw;
+    min-height: 100vh;
+    height: 100vh;
+}
+
+dialog {
+    min-width: min(800px, 90vw);
+    max-width: 90vw;
+    margin-inline: auto;
+    margin-block: auto;
+    background-color: var(--color-stone-800);
+    color: var(--primary-text-color);
+    display: flex;
+    flex-direction: column;
+    padding: 1.25rem;
+    gap: 2.5rem;
+}
+
+dialog::backdrop {
+    background-color: color-mix(in srgb, var(--color-stone-950) 80%, transparent 20%);
+}
+
+dialog:not([open]) {
+    display: none;
+}
+
+input[type="text"] {
+    outline: 1px solid var(--color-stone-500);
+}
+
+input[type="text"] {
+    outline: 1px solid var(--color-stone-500);
+    padding: 0.5rem;
+    background-color: var(--color-stone-900);
+}
+
+input[type="text"]:focus {
+    outline: 1px solid var(--color-stone-500);
+    padding: 0.5rem;
+    background-color: var(--color-stone-900);
+}
