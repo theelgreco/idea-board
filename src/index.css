@@ -74,3 +74,12 @@ input[type="text"]:focus {
     padding: 0.5rem;
     background-color: var(--color-stone-900);
 }
+
+input[type="text"].error {
+    outline: 1px solid var(--color-red-400);
+}
+
+input[type="text"]:disabled {
+    opacity: 50%;
+    cursor: not-allowed;
+}
