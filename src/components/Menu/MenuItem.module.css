@@ -1,0 +1,9 @@
+.menu-item:has(.editing) {
+    outline: 1px solid white;
+    background-color: color-mix(in srgb, var(--color-stone-800) 80%, transparent 20%);
+}
+
+.menu-item .editing {
+    outline: none;
+    width: 100%;
+}

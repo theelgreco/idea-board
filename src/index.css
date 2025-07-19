@@ -1,16 +1,23 @@
 @import url("./assets/fonts/fonts.css");
 @import "tailwindcss";
 
+@theme {
+    --color-primary-background-color: var(--primary-background-color);
+    --color-secondary-background-color: var(--secondary-background-color);
+}
+
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg-color: var(--color-stone-800);
+        --primary-background-color: #343434;
+        --secondary-background-color: #303030;
         --primary-text-color: var(--color-gray-50);
     }
 }
 
 @media (prefers-color-scheme: light) {
     :root {
-        --bg-color: #ffffff;
+        --primary-background-color: #ffffff;
+        --secondary-background-color: #ffffff;
         --primary-text-color: #0f0f0f;
     }
 }
@@ -22,9 +29,10 @@
 }
 
 body {
-    background-color: var(--bg-color);
+    background-color: var(--color-primary-background-color);
     color: var(--primary-text-color);
     font-family: "Inter";
+    overscroll-behavior-block: none;
 }
 
 #root {
@@ -59,7 +67,7 @@ dialog:not([open]) {
     display: none;
 }
 
-input[type="text"] {
+/* input[type="text"] {
     outline: 1px solid var(--color-stone-500);
 }
 
@@ -78,8 +86,5 @@ input[type="text"]:focus {
 input[type="text"].error {
     outline: 1px solid var(--color-red-400);
 }
-
-input[type="text"]:disabled {
-    opacity: 50%;
-    cursor: not-allowed;
-}
+    
+*/

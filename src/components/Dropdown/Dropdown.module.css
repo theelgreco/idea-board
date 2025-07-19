@@ -14,7 +14,7 @@
     display: flex;
     align-items: center;
     gap: 2rem;
-    outline: 1px solid var(--color-stone-600);
+    border: 1px solid var(--color-stone-600);
     cursor: pointer;
 }
 
@@ -36,7 +36,8 @@
     outline: none;
 }
 
-.select option:focus {
+.select option:focus,
+.select option:hover {
     border-width: 1px;
     border-color: var(--color-stone-400);
     background-color: var(--color-stone-500);
