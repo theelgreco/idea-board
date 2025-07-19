@@ -104,7 +104,7 @@ export default function SideBar() {
 
     return (
         <>
-            <div className="flex flex-col justify-between sm:gap-3 sm:w-[400px]">
+            <div className="flex flex-col justify-between sm:gap-3 sm:w-[400px] max-sm:w-0 max-sm:overflow-hidden">
                 <Menu
                     items={menuItems}
                     selectedItem={selectedMenuItem}
