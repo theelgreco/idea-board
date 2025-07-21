@@ -59,7 +59,10 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
                     <div
                         key={el.value}
                         className={clsx(styles["popup-menu-item"], { [styles.selected]: el.value === selectedItem?.value })}
-                        onClick={() => onSelection(el.value)}
+                        onClick={() => {
+                            setIsOpen(false);
+                            onSelection(el.value);
+                        }}
                     >
                         {el.label}
                     </div>
