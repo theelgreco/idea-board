@@ -53,7 +53,7 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
             className={clsx(
                 "flex items-center justify-between gap-3 px-5! py-3! cursor-pointer transition-colors select-none disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-900 focus-visible:bg-stone-900 rounded-lg! text-sm!",
                 styles["menu-item"],
-                { "bg-stone-900": selected }
+                { "bg-stone-900 sticky top-0 bottom-0": selected }
             )}
             onDoubleClick={toggleEdit}
             onPointerEnter={() => setIsHovered(true)}

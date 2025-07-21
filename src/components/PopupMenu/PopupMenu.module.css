@@ -1,0 +1,69 @@
+:root {
+    --container-bg: #171717;
+    --container-bg-highlighted: color-mix(in srgb, var(--container-bg) 98%, white);
+    --popup-menu-item-bg: #171717;
+    --popup-menu-item-bg-highlighted: color-mix(in srgb, var(--popup-menu-item-bg) 90%, white);
+    --popup-menu-item-bg-hovered: color-mix(in srgb, var(--popup-menu-item-bg) 95%, white);
+    --primary-text: var(--color-stone-400);
+    --primary-text-highlighted: color-mix(in srgb, var(--primary-text) 25%, white);
+    --primary-border: var(--color-stone-500);
+}
+
+.container {
+    position: relative;
+    user-select: none;
+    cursor: pointer;
+    transition: background-color 150ms ease-in;
+    border-radius: var(--radius-lg);
+}
+
+.container:hover {
+    background-color: var(--container-bg-highlighted);
+}
+
+.container:has(.popup-menu.open) {
+    background-color: var(--container-bg-highlighted);
+    outline: 1px solid var(--color-stone-500);
+}
+
+.popup-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    right: 0;
+    width: 250px;
+    border: 1px solid var(--primary-border);
+    background: var(--container-bg);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.popup-menu:not(.popup-menu.open) {
+    display: none;
+}
+
+.popup-menu.open {
+    display: flex;
+    flex-direction: column;
+}
+
+.popup-menu > .popup-menu-item {
+    padding: 1rem;
+    cursor: pointer;
+    color: var(--primary-text);
+}
+
+.popup-menu > .popup-menu-item.selected {
+    color: var(--primary-text-highlighted);
+}
+
+.popup-menu > .popup-menu-item.selected {
+    background: var(--popup-menu-item-bg-highlighted);
+}
+
+.popup-menu > .popup-menu-item:not(.selected):hover {
+    background: var(--popup-menu-item-bg-hovered);
+}
+
+.popup-menu > .popup-menu-item * {
+    pointer-events: none;
+}

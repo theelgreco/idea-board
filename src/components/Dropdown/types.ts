@@ -1,13 +1,13 @@
 import type React from "react";
 
-export interface MenuItem {
-    label: string;
-    value: string;
+export interface MenuItem<L = string, V = string> {
+    label: L;
+    value: V;
 }
 
 export interface DropdownProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
     id: string;
     items: MenuItem[];
-    selectedItem?: MenuItem["value"];
-    handleSelect: (value: MenuItem["value"]) => void;
+    selectedItem: MenuItem;
+    handleSelect: (value: string) => void;
 }

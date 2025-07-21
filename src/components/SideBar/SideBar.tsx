@@ -5,10 +5,15 @@ import { MdAdd } from "react-icons/md";
 import Menu from "@/components/Menu/Menu";
 import type { MenuItem } from "@/components/Menu/types";
 
-export default function SideBar() {
+interface Props {
+    selectedMenuItem: MenuItem["value"] | undefined;
+    setSelectedMenuItem: React.Dispatch<React.SetStateAction<string | undefined>>;
+}
+
+export default function SideBar({ selectedMenuItem, setSelectedMenuItem }: Props) {
     const [collections, setCollections] = useState<Collection[] | null>(null);
     const menuItems = useMemo<MenuItem[]>(() => {
-        const items: MenuItem[] = [{ label: "All Collections", value: "all", editable: false }];
+        const items: MenuItem[] = [{ label: "All Ideas", value: "all", editable: false }];
 
         if (collections) {
             items.push(
@@ -20,7 +25,6 @@ export default function SideBar() {
 
         return items;
     }, [collections]);
-    const [selectedMenuItem, setSelectedMenuItem] = useState<MenuItem["value"] | undefined>(undefined);
     const [isAddingCollection, setIsAddingCollection] = useState(false);
     const [isSubmittingCollection, setIsSubmittingCollection] = useState(false);
 
@@ -104,25 +108,30 @@ export default function SideBar() {
 
     return (
         <>
-            <div className="flex flex-col justify-between sm:gap-3 sm:w-[400px] max-sm:w-0 max-sm:overflow-hidden">
-                <Menu
-                    items={menuItems}
-                    selectedItem={selectedMenuItem}
-                    isAdding={isAddingCollection}
-                    onCreate={handleOnCreate}
-                    onSelect={(val) => setSelectedMenuItem(val.value)}
-                    onEdit={(item, name) => updateCollection(name, item.value)}
-                    onDelete={({ value }) => removeCollection(value)}
-                />
-                <Button
-                    onClick={handleClick}
-                    text="Add Collection"
-                    Icon={MdAdd}
-                    variant="plain"
-                    iconPosition="right"
-                    className="justify-between"
-                    disabled={isSubmittingCollection || isAddingCollection}
-                />
+            <div className="flex flex-col justify-between sm:gap-3 sm:w-[400px] max-sm:w-0 max-sm:overflow-hidden h-full">
+                <div className="max-h-full overflow-y-auto p-1">
+                    <Menu
+                        items={menuItems}
+                        selectedItem={selectedMenuItem}
+                        isAdding={isAddingCollection}
+                        onCreate={handleOnCreate}
+                        onSelect={(val) => setSelectedMenuItem(val.value)}
+                        onEdit={(item, name) => updateCollection(name, item.value)}
+                        onDelete={({ value }) => removeCollection(value)}
+                    />
+                </div>
+                <div className="flex flex-col gap-2">
+                    <hr className="border-stone-700" />
+                    <Button
+                        onClick={handleClick}
+                        text="Add Collection"
+                        Icon={MdAdd}
+                        variant="plain"
+                        iconPosition="right"
+                        className="justify-between w-full"
+                        disabled={isSubmittingCollection || isAddingCollection}
+                    />
+                </div>
             </div>
         </>
     );
