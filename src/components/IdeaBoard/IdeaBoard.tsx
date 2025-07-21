@@ -26,6 +26,7 @@ export default function IdeaBoard({ selectedCollection }: Props) {
     const [isAdding, setIsAdding] = useState(false);
     const [order, setOrder] = useState<OrderChoices>("desc");
     const [selectedSortByOption, setSelectedSortByOption] = useState<SortByMenuItem>(sortByOptions[0]);
+    const [newIdeaName, setNewIdeaName] = useState("");
 
     function handleSortSelection(value: string) {
         const selection = sortByOptions.find((el) => el.value === value);
@@ -60,6 +61,7 @@ export default function IdeaBoard({ selectedCollection }: Props) {
                 <div className="flex gap-10 flex-wrap">
                     <IdeaCard
                         empty={!isAdding}
+                        name={newIdeaName}
                         onClick={() => {
                             if (!isAdding) {
                                 setIsAdding(true);
