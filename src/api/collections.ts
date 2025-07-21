@@ -33,7 +33,7 @@ export async function getCollections(): Promise<MockHttpResponse<Collection[]>> 
 
     const response = {
         status: HttpStatusCode.OK,
-        data: collections,
+        data: collections.sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
     };
 
     return response;

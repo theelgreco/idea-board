@@ -3,10 +3,19 @@
     appearance: base-select;
 }
 
+.select {
+    flex-direction: row-reverse;
+    gap: 1rem !important;
+}
+
 ::picker(select) {
     margin-top: 1px;
     background-color: inherit;
     border-color: var(--color-stone-600);
+}
+
+select::picker-icon {
+    content: "ᯤ";
 }
 
 .select {
@@ -14,7 +23,6 @@
     display: flex;
     align-items: center;
     gap: 2rem;
-    border: 1px solid var(--color-stone-600);
     cursor: pointer;
 }
 

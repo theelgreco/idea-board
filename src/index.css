@@ -24,7 +24,6 @@
 
 * {
     margin: 0;
-    padding: 0;
     box-sizing: border-box;
 }
 
@@ -33,6 +32,7 @@ body {
     color: var(--primary-text-color);
     font-family: "Inter";
     overscroll-behavior-block: none;
+    overflow: hidden;
 }
 
 #root {
