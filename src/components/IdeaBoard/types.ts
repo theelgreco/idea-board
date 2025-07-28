@@ -3,6 +3,7 @@ import type { PopupMenuItem } from "../PopupMenu/types";
 
 export interface IdeaBoardProps {
     selectedCollection: Collection | null;
+    onOpenSideBar: () => void;
 }
 
 export type OrderChoices = "asc" | "desc";
