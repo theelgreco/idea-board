@@ -1,0 +1,45 @@
+:root {
+    --add-idea-button-border: 1px dashed #6b6b6b;
+    --add-idea-button-bg: #2d2d2d;
+    --add-idea-button-bg-hovered: #262626;
+}
+
+.add-idea-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: var(--idea-card-size);
+    min-width: var(--idea-card-size);
+    max-width: var(--idea-card-size);
+    height: var(--idea-card-size);
+    min-height: var(--idea-card-size);
+    max-height: var(--idea-card-size);
+    background-color: var(--add-idea-button-bg);
+    border-radius: var(--radius-lg);
+    border: var(--add-idea-button-border);
+    cursor: pointer;
+    user-select: none;
+    color: var(--color-stone-500);
+    font-size: var(--text-xl);
+}
+
+.add-idea-button:hover {
+    background-color: var(--add-idea-button-bg-hovered);
+}
+
+.add-idea-button .icon {
+    color: var(--color-stone-600);
+}
+
+@media screen and (width >= 640px) {
+    .mobile {
+        display: none;
+    }
+}
+
+@media screen and (width < 640px) {
+    .add-idea-button.widescreen {
+        display: none;
+    }
+}

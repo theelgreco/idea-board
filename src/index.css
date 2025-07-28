@@ -4,6 +4,7 @@
 @theme {
     --color-primary-background-color: var(--primary-background-color);
     --color-secondary-background-color: var(--secondary-background-color);
+    --idea-card-size: 300px;
 }
 
 @media (prefers-color-scheme: dark) {

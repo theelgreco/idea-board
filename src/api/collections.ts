@@ -1,7 +1,7 @@
 import { MOCK_API_DELAY_AMOUNT } from "@/utils/constants";
 import delay from "../utils/delay";
 import { localStorageGetOrCreate } from "../utils/storage";
-import { HttpStatusCode, type MockHttpResponse } from "./types";
+import { HttpStatusCode, type MockHttpResponse } from "./types/http";
 import { FieldRequiredError, UniqueConstraintError } from "@/utils/errors";
 
 export interface Collection {
@@ -10,33 +10,23 @@ export interface Collection {
     createdAt: string;
 }
 
-interface CollectionPostData {
-    name: string;
-}
+type CollectionPostData = Pick<Collection, "name">;
 
-interface CollectionPatchData {
-    name: string;
-}
+type CollectionPatchData = Pick<Collection, "name">;
 
-interface CollectionPatchParams {
-    id: string;
-}
+type CollectionPatchParams = Pick<Collection, "id">;
 
-interface CollectionDeleteParams {
-    id: string;
-}
+type CollectionDeleteParams = Pick<Collection, "id">;
 
 export async function getCollections(): Promise<MockHttpResponse<Collection[]>> {
     await delay(MOCK_API_DELAY_AMOUNT);
 
     const collections = JSON.parse(localStorageGetOrCreate("collections", JSON.stringify([]))) as Collection[];
 
-    const response = {
+    return {
         status: HttpStatusCode.OK,
         data: collections.sort((a, b) => a.createdAt.localeCompare(b.createdAt)),
     };
-
-    return response;
 }
 
 export async function postCollection(data: CollectionPostData): Promise<MockHttpResponse<Collection>> {

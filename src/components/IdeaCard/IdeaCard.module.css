@@ -1,0 +1,177 @@
+:root {
+    --idea-card-bg: var(--color-stone-900);
+    --idea-card-header-bg: var(--color-stone-950);
+    --idea-card-padding: calc(var(--spacing) * 3);
+    --idea-card-radius: var(--radius-lg);
+}
+
+.idea-card {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--idea-card-bg);
+    width: var(--idea-card-size);
+    min-width: min(var(--idea-card-size), 100%);
+    max-width: min(var(--idea-card-size), 100%);
+    height: var(--idea-card-size);
+    min-height: var(--idea-card-size);
+    max-height: var(--idea-card-size);
+    border-radius: var(--idea-card-radius);
+    overflow: hidden;
+}
+
+/* .idea-card:has(.text-input) {
+    animation-name: slideInLeft, fadeIn;
+    animation-duration: 500ms;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0;
+    animation-iteration-count: 1;
+} */
+
+.idea-card .header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--idea-card-header-bg);
+    border-top-left-radius: var(--radius-lg);
+    border-top-right-radius: var(--radius-lg);
+    padding: var(--idea-card-padding);
+    width: 100%;
+}
+
+.idea-card .header {
+    font-size: var(--text-2xl);
+}
+
+.idea-card .header .icon {
+    cursor: pointer;
+}
+
+.idea-card .text-input {
+    padding-inline: var(--spacing);
+    outline-width: 0px;
+    outline-color: var(--color-stone-300);
+    outline-style: solid;
+    border: 0 !important;
+    border-radius: var(--radius-sm);
+    resize: none;
+    width: 100%;
+    height: 100%;
+}
+
+.idea-card .text-input:focus {
+    outline-width: 1px;
+}
+
+.idea-card .text-input::placeholder {
+    color: var(--color-stone-700);
+}
+
+.idea-card .no-description {
+    user-select: none;
+    color: var(--color-stone-700);
+}
+
+.idea-card .description {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: var(--idea-card-padding);
+    border-bottom-left-radius: var(--idea-card-radius);
+    border-bottom-right-radius: var(--idea-card-radius);
+    gap: 0.75rem;
+}
+
+.idea-card .description .char-count {
+    margin-left: auto;
+    margin-top: auto;
+    color: var(--color-stone-400);
+    transition: color 100ms ease-in;
+}
+
+.idea-card .description .char-count.warning {
+    color: var(--color-amber-400);
+}
+
+.idea-card .description .char-count.max,
+.idea-card .description .char-count.danger {
+    color: var(--color-red-400);
+}
+
+.idea-card .description .char-count.max {
+    animation-name: shake;
+    animation-duration: 500ms;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0;
+    animation-iteration-count: 1;
+}
+
+.idea-card .footer {
+    padding: var(--idea-card-padding);
+    display: flex;
+    border-top: 1px solid var(--color-stone-800);
+    flex-direction: column;
+}
+
+.idea-card .metadata {
+    color: var(--color-stone-500);
+}
+
+@keyframes shake {
+    0% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+    6.5% {
+        -webkit-transform: translateX(-6px) rotateY(-9deg);
+        transform: translateX(-6px) rotateY(-9deg);
+    }
+    18.5% {
+        -webkit-transform: translateX(5px) rotateY(7deg);
+        transform: translateX(5px) rotateY(7deg);
+    }
+    31.5% {
+        -webkit-transform: translateX(-3px) rotateY(-5deg);
+        transform: translateX(-3px) rotateY(-5deg);
+    }
+    43.5% {
+        -webkit-transform: translateX(2px) rotateY(3deg);
+        transform: translateX(2px) rotateY(3deg);
+    }
+    50% {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+        scale: 1.1;
+    }
+}
+
+@keyframes zoomIn {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale3d(0.3, 0.3, 0.3);
+        transform: scale3d(0.3, 0.3, 0.3);
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+@keyframes slideInLeft {
+    0% {
+        -webkit-transform: translate3d(-100%, 0, 0);
+        transform: translate3d(-100%, 0, 0);
+        visibility: visible;
+    }
+    to {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
