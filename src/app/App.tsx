@@ -9,6 +9,7 @@ function App() {
     const [selectedCollection, setSelectedCollection] = useState<Collection | null>(null);
     const [isAddingCollection, setIsAddingCollection] = useState(false);
     const [isSubmittingCollection, setIsSubmittingCollection] = useState(false);
+    const [isSideBarOpen, setIsSideBarOpen] = useState(false);
     const menuItems = [
         { label: "All Ideas", value: "all", editable: false },
         ...(collections || []).map((el) => ({
@@ -91,13 +92,15 @@ function App() {
                 selectedCollection={selectedCollection}
                 isAddingCollection={isAddingCollection}
                 isSubmittingCollection={isSubmittingCollection}
+                isOpen={isSideBarOpen}
                 onSelectCollection={(value) => setSelectedCollection(collections?.find((el) => el.id === value) || null)}
                 onCreateCollection={handleOnCreate}
                 onEditCollection={updateCollection}
                 onDeleteCollection={removeCollection}
                 onClickAddCollection={() => setIsAddingCollection(true)}
+                onCloseSideBar={() => setIsSideBarOpen(false)}
             />
-            <IdeaBoard selectedCollection={selectedCollection} />
+            <IdeaBoard selectedCollection={selectedCollection} onOpenSideBar={() => setIsSideBarOpen(true)} />
         </main>
     );
 }

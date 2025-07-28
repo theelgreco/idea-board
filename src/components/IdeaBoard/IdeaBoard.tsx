@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import IdeaCard from "../IdeaCard/IdeaCard";
 import Button from "../Button/Button";
-import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
+import { MdArrowDownward, MdArrowUpward, MdMenu } from "react-icons/md";
 import { IoMdFunnel } from "react-icons/io";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import {
@@ -24,7 +24,7 @@ const sortByOptions: SortByMenuItem[] = [
     { label: "Name", value: "name" },
 ];
 
-export default function IdeaBoard({ selectedCollection }: IdeaBoardProps) {
+export default function IdeaBoard({ selectedCollection, onOpenSideBar }: IdeaBoardProps) {
     const [ideas, setIdeas] = useState<Idea[] | null>(null);
     const [isAdding, setIsAdding] = useState(false);
     const [order, setOrder] = useState<OrderChoices>("desc");
@@ -92,7 +92,10 @@ export default function IdeaBoard({ selectedCollection }: IdeaBoardProps) {
     return (
         <section className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
             <div className="w-full flex justify-between px-5 py-3 sm:px-8 sm:py-5 bg-[#222222]">
-                <h1 className="font-semibold text-2xl">{selectedCollection?.name || "All Ideas"}</h1>
+                <div className="flex items-center gap-5">
+                    <MdMenu className="sm:hidden cursor-pointer" onClick={onOpenSideBar} />
+                    <h1 className="font-semibold text-2xl">{selectedCollection?.name || "All Ideas"}</h1>
+                </div>
                 <div className="flex items-center gap-1.5">
                     <PopupMenu
                         items={sortByOptions}
