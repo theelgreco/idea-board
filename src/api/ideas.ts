@@ -6,23 +6,23 @@ import { HttpStatusCode, type MockHttpResponse } from "./types/http";
 export interface Idea {
     id: string;
     name: string;
-    description?: string;
+    description: string;
     createdAt: string;
     lastModified: string;
 }
 
-interface IdeasGetParams {
+export interface IdeasGetParams {
     sortBy?: "createdAt" | "name";
     order?: "asc" | "desc";
 }
 
-type IdeaPostData = Pick<Idea, "name" | "description">;
+export type IdeaPostData = Pick<Idea, "name" | "description">;
 
-type IdeaPutData = Partial<Pick<Idea, "name" | "description">>;
+export type IdeaPutData = Partial<Pick<Idea, "name" | "description">>;
 
-type IdeaPutParams = Pick<Idea, "id">;
+export type IdeaPutParams = Pick<Idea, "id">;
 
-type IdeaDeleteParams = Pick<Idea, "id">;
+export type IdeaDeleteParams = Pick<Idea, "id">;
 
 const DEFAULT_SORT_BY_FIELD = "createdAt";
 const DEFAULT_ORDER = "asc";
@@ -54,9 +54,9 @@ export async function postIdea(data: IdeaPostData): Promise<MockHttpResponse<Ide
 
     const currentDateTime = new Date().toISOString();
 
-    const newIdea: Idea = { description: "", createdAt: currentDateTime, lastModified: currentDateTime, id: crypto.randomUUID(), ...data };
+    const newIdea: Idea = { createdAt: currentDateTime, lastModified: currentDateTime, id: crypto.randomUUID(), ...data };
 
-    const ideas = JSON.parse(localStorageGetOrCreate("idea", JSON.stringify([]))) as Idea[];
+    const ideas = JSON.parse(localStorageGetOrCreate("ideas", JSON.stringify([]))) as Idea[];
 
     localStorage.setItem("ideas", JSON.stringify([...ideas, newIdea]));
 
