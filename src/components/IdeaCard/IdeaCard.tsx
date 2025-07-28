@@ -22,7 +22,6 @@ export default function IdeaCard({
     const [newIdeaDescription, setNewIdeaDescription] = useState(description);
     const [maxCountExceeded, setMaxCountExceeded] = useState(false);
     const [editing, setEditing] = useState({ name: false, description: false });
-    const [isHovered, setIsHovered] = useState(false);
     const nameInputRef = useRef<HTMLInputElement>(null);
     const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
     const createdAtString = createdAt ? formatRelative(new Date(createdAt), new Date()) : null;
@@ -68,14 +67,8 @@ export default function IdeaCard({
         }
     }
 
-    function handleMouseEnter() {
-        if (!isAdding) {
-            setIsHovered(true);
-        }
-    }
-
     return (
-        <div className={styles["idea-card"]} onMouseEnter={handleMouseEnter} onMouseLeave={() => setIsHovered(false)}>
+        <div className={styles["idea-card"]}>
             <div className={styles.header}>
                 {!isAdding && !editing.name ? (
                     <>
