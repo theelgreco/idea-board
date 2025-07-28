@@ -66,6 +66,11 @@
     color: var(--color-stone-700);
 }
 
+.idea-card .no-description {
+    user-select: none;
+    color: var(--color-stone-700);
+}
+
 .idea-card .description {
     height: 100%;
     display: flex;

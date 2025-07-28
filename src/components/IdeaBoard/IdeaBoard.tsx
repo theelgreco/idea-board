@@ -4,7 +4,18 @@ import Button from "../Button/Button";
 import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
 import { IoMdFunnel } from "react-icons/io";
 import PopupMenu from "../PopupMenu/PopupMenu";
-import { deleteIdea, getIdeas, postIdea, type Idea, type IdeaDeleteParams, type IdeaPostData, type IdeasGetParams } from "@/api/ideas";
+import {
+    deleteIdea,
+    getIdeas,
+    postIdea,
+    putIdea,
+    type Idea,
+    type IdeaDeleteParams,
+    type IdeaPostData,
+    type IdeaPutData,
+    type IdeaPutParams,
+    type IdeasGetParams,
+} from "@/api/ideas";
 import AddIdeaButton from "../AddIdeaButton/AddIdeaButton";
 import type { IdeaBoardProps, OrderChoices, SortByMenuItem } from "./types";
 
@@ -62,6 +73,18 @@ export default function IdeaBoard({ selectedCollection }: IdeaBoardProps) {
         }
     }
 
+    async function editIdea(data: IdeaPutData, params: IdeaPutParams) {
+        try {
+            const response = await putIdea(data, params);
+
+            setIdeas((prev) => {
+                return (prev || [])?.map((el) => (el.id === params.id ? response.data : el));
+            });
+        } catch (err: unknown) {
+            console.error(err);
+        }
+    }
+
     useEffect(() => {
         fetchIdeas();
     }, [fetchIdeas]);
@@ -102,6 +125,7 @@ export default function IdeaBoard({ selectedCollection }: IdeaBoardProps) {
                                 createdAt={el.createdAt}
                                 lastModified={el.lastModified}
                                 onDelete={() => removeIdea({ id: el.id })}
+                                onSave={(data) => editIdea(data, { id: el.id })}
                             />
                         ))}
                 </div>

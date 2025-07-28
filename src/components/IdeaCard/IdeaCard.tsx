@@ -51,6 +51,10 @@ export default function IdeaCard({
             }
         } else {
             setEditing({ name: false, description: false });
+
+            if (newIdeaName || newIdeaDescription) {
+                onSave?.({ name: newIdeaName, description: newIdeaDescription });
+            }
         }
     }
 
@@ -73,9 +77,9 @@ export default function IdeaCard({
     return (
         <div className={styles["idea-card"]} onMouseEnter={handleMouseEnter} onMouseLeave={() => setIsHovered(false)}>
             <div className={styles.header}>
-                {!isAdding ? (
+                {!isAdding && !editing.name ? (
                     <>
-                        <h1>{name}</h1>
+                        <h1 onDoubleClick={() => setEditing({ name: true, description: false })}>{name}</h1>
                         <IoMdTrash size={18} className={styles.icon} onClick={onDelete} />
                     </>
                 ) : (
@@ -96,7 +100,7 @@ export default function IdeaCard({
                 {!isAdding && !editing.description ? (
                     <>
                         <p className="h-full" onDoubleClick={() => setEditing({ name: false, description: true })}>
-                            {description ? <span>{description}</span> : <span className="text-stone-700">What's your idea?</span>}
+                            {description ? <span>{description}</span> : <span className={styles["no-description"]}>What's your idea?</span>}
                         </p>
                         <small className={styles["char-count"]}>{description.length} / 140</small>
                     </>
