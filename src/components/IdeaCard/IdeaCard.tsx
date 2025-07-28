@@ -72,7 +72,7 @@ export default function IdeaCard({
             <div className={styles.header}>
                 {!isAdding && !editing.name ? (
                     <>
-                        <h1 onDoubleClick={() => setEditing({ name: true, description: false })}>{name}</h1>
+                        <h1 onClick={() => setEditing({ name: true, description: false })}>{name}</h1>
                         <IoMdTrash size={18} className={styles.icon} onClick={onDelete} />
                     </>
                 ) : (
@@ -92,7 +92,7 @@ export default function IdeaCard({
             <div className={clsx(styles.description, { disabled: isAdding && !newIdeaName })}>
                 {!isAdding && !editing.description ? (
                     <>
-                        <p className="h-full" onDoubleClick={() => setEditing({ name: false, description: true })}>
+                        <p className="h-full" onClick={() => setEditing({ name: false, description: true })}>
                             {description ? <span>{description}</span> : <span className={styles["no-description"]}>What's your idea?</span>}
                         </p>
                         <small className={styles["char-count"]}>{description.length} / 140</small>

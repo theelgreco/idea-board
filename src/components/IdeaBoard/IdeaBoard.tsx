@@ -92,11 +92,13 @@ export default function IdeaBoard({ selectedCollection, onOpenSideBar }: IdeaBoa
     return (
         <section className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
             <div className="w-full flex justify-between px-5 py-3 sm:px-8 sm:py-5 bg-[#222222]">
-                <div className="flex items-center gap-5">
-                    <MdMenu className="sm:hidden cursor-pointer" onClick={onOpenSideBar} />
-                    <h1 className="font-semibold text-2xl">{selectedCollection?.name || "All Ideas"}</h1>
+                <div className="flex items-center gap-5 max-w-full overflow-hidden">
+                    <MdMenu className="sm:hidden cursor-pointer min-w-[24px]" onClick={onOpenSideBar} size={24} />
+                    <h1 className="font-semibold text-2xl text-ellipsis text-nowrap overflow-hidden">
+                        {selectedCollection?.name || "All Ideas"}
+                    </h1>
                 </div>
-                <div className="flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 text-nowrap">
                     <PopupMenu
                         items={sortByOptions}
                         selectedItem={selectedSortByOption}

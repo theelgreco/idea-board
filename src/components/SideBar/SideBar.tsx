@@ -21,7 +21,7 @@ export default function SideBar({
         <>
             <div
                 className={clsx(
-                    "h-full flex flex-col justify-between sm:gap-3 sm:w-[400px] max-sm:fixed max-sm:bg-inherit max-sm:z-40 max-sm:shadow-2xl max-sm:overflow-hidden max-sm:transition-all max-sm:-translate-x-full max-sm:w-2/3 max-sm:p-3",
+                    "h-full flex flex-col justify-between sm:gap-3 sm:w-[400px] max-sm:fixed max-sm:bg-inherit max-sm:z-40 max-sm:overflow-hidden max-sm:transition-all max-sm:-translate-x-full max-sm:w-2/3 max-sm:p-3",
                     { "max-sm:translate-x-0": isOpen }
                 )}
             >
