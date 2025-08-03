@@ -1,3 +1,3 @@
-export const MOCK_API_DELAY_AMOUNT = 1000;
+export const MOCK_API_DELAY_AMOUNT = 0;
 
 export const DESCRIPTION_MAX_CHAR_COUNT = 140;
