@@ -12,6 +12,7 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
 
     function toggleEdit(e: React.MouseEvent) {
         e.stopPropagation();
+        e.preventDefault();
         if (!isEditing && item?.editable) {
             setIsEditing(true);
         }
@@ -75,10 +76,16 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
             ) : (
                 <>
                     <span>{item?.label}</span>
-                    {isHovered && item?.editable && (
+                    {(isHovered || selected) && item?.editable && (
                         <div className="flex gap-2">
                             <MdEdit className="hover:bg-stone-700/50 mr-3" onClick={toggleEdit} />
-                            <MdDelete className="hover:bg-stone-700/50" onClick={() => onDelete?.(item)} />
+                            <MdDelete
+                                className="hover:bg-stone-700/50"
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    onDelete?.(item);
+                                }}
+                            />
                         </div>
                     )}
                 </>
