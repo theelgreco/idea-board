@@ -9,16 +9,18 @@ export interface Idea {
     description: string;
     createdAt: string;
     lastModified: string;
+    collection?: string | null;
 }
 
 export interface IdeasGetParams {
     sortBy?: "createdAt" | "name";
     order?: "asc" | "desc";
+    collection?: string | null;
 }
 
-export type IdeaPostData = Pick<Idea, "name" | "description">;
+export type IdeaPostData = Pick<Idea, "name" | "description" | "collection">;
 
-export type IdeaPutData = Partial<Pick<Idea, "name" | "description">>;
+export type IdeaPutData = Partial<Pick<Idea, "name" | "description" | "collection">>;
 
 export type IdeaPutParams = Pick<Idea, "id">;
 
@@ -35,7 +37,11 @@ export async function getIdeas(params: IdeasGetParams): Promise<MockHttpResponse
     if (!order) order = DEFAULT_ORDER;
     if (!sortBy) sortBy = DEFAULT_SORT_BY_FIELD;
 
-    const ideas = JSON.parse(localStorageGetOrCreate("ideas", JSON.stringify([]))) as Idea[];
+    let ideas = JSON.parse(localStorageGetOrCreate("ideas", JSON.stringify([]))) as Idea[];
+
+    if (params.collection) {
+        ideas = ideas.filter((idea) => idea.collection === params.collection);
+    }
 
     if (params.order === "desc") {
         ideas.sort((a, b) => b[sortBy].localeCompare(a[sortBy]));
