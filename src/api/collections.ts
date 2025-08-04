@@ -69,14 +69,13 @@ export async function patchCollection(data: CollectionPatchData, params: Collect
         throw new Error("Invalid ID provided");
     }
 
-    localStorage.setItem(
-        "collections",
-        JSON.stringify([...collections.filter((el) => el.id !== params.id), { ...collectionToUpate, name: data.name }])
-    );
+    const updatedCollection = { ...collectionToUpate, name: data.name };
+
+    localStorage.setItem("collections", JSON.stringify([...collections.filter((el) => el.id !== params.id), updatedCollection]));
 
     return {
         status: HttpStatusCode.OK,
-        data: collectionToUpate,
+        data: updatedCollection,
     };
 }
 

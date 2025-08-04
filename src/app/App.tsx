@@ -3,6 +3,9 @@ import IdeaBoard from "@/components/IdeaBoard/IdeaBoard";
 import SideBar from "../components/SideBar/SideBar";
 import { useEffect, useState } from "react";
 import { type Collection, deleteCollection, getCollections, patchCollection, postCollection } from "@/api/collections";
+import { Toaster } from "@/components/ui/sonner";
+import { toast } from "sonner";
+import { UniqueConstraintError } from "@/utils/errors";
 
 function App() {
     const [collections, setCollections] = useState<Collection[] | null>(null);
@@ -40,6 +43,9 @@ function App() {
             });
             setSelectedCollection(response.data);
         } catch (err: unknown) {
+            if (err instanceof UniqueConstraintError) {
+                toast.error(err.message);
+            }
             console.error(err);
         }
     }
@@ -61,6 +67,10 @@ function App() {
 
             if (collections) {
                 setCollections([...collections.filter((el) => el.id !== id), response.data]);
+
+                if (selectedCollection?.id === id) {
+                    setSelectedCollection(response.data);
+                }
             }
         } catch (err: unknown) {
             console.error(err);
@@ -82,26 +92,33 @@ function App() {
     }
 
     useEffect(() => {
+        if (window.matchMedia("(prefers-color-scheme: dark)")) {
+            document.body.classList.add("dark");
+        }
+
         fetchCollections();
     }, []);
 
     return (
-        <main className="flex w-full h-full sm:p-5! gap-5 bg-primary-background-color">
-            <SideBar
-                menuItems={menuItems}
-                selectedCollection={selectedCollection}
-                isAddingCollection={isAddingCollection}
-                isSubmittingCollection={isSubmittingCollection}
-                isOpen={isSideBarOpen}
-                onSelectCollection={(value) => setSelectedCollection(collections?.find((el) => el.id === value) || null)}
-                onCreateCollection={handleOnCreate}
-                onEditCollection={updateCollection}
-                onDeleteCollection={removeCollection}
-                onClickAddCollection={() => setIsAddingCollection(true)}
-                onCloseSideBar={() => setIsSideBarOpen(false)}
-            />
-            <IdeaBoard selectedCollection={selectedCollection} onOpenSideBar={() => setIsSideBarOpen(true)} />
-        </main>
+        <>
+            <main className="flex w-full h-full sm:p-5! gap-5 bg-primary-background-color">
+                <SideBar
+                    menuItems={menuItems}
+                    selectedCollection={selectedCollection}
+                    isAddingCollection={isAddingCollection}
+                    isSubmittingCollection={isSubmittingCollection}
+                    isOpen={isSideBarOpen}
+                    onSelectCollection={(value) => setSelectedCollection(collections?.find((el) => el.id === value) || null)}
+                    onCreateCollection={handleOnCreate}
+                    onEditCollection={updateCollection}
+                    onDeleteCollection={removeCollection}
+                    onClickAddCollection={() => setIsAddingCollection(true)}
+                    onCloseSideBar={() => setIsSideBarOpen(false)}
+                />
+                <IdeaBoard selectedCollection={selectedCollection} onOpenSideBar={() => setIsSideBarOpen(true)} />
+            </main>
+            <Toaster position="top-right" richColors />
+        </>
     );
 }
 
