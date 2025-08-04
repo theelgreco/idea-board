@@ -47,7 +47,6 @@
 }
 
 .idea-card .text-input {
-    padding-inline: var(--spacing);
     outline-width: 0px;
     outline-color: var(--color-stone-300);
     outline-style: solid;

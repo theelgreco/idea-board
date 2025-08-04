@@ -71,14 +71,13 @@ export default function IdeaCard({
         <div className={styles["idea-card"]}>
             <div className={styles.header}>
                 {!isAdding && !editing.name ? (
-                    <>
-                        <h1 onClick={() => setEditing({ name: true, description: false })}>{name}</h1>
-                        <IoMdTrash size={18} className={styles.icon} onClick={onDelete} />
-                    </>
+                    <h1 className="w-full" onClick={() => setEditing({ name: true, description: false })}>
+                        {name}
+                    </h1>
                 ) : (
                     <input
                         ref={nameInputRef}
-                        className={styles["text-input"]}
+                        className={clsx(styles["text-input"], "p-1! mr-2!")}
                         type="text"
                         autoFocus
                         placeholder="Enter idea name"
@@ -88,6 +87,7 @@ export default function IdeaCard({
                         onBlur={handleBlur}
                     />
                 )}
+                <IoMdTrash size={18} className={styles.icon} onClick={onDelete} />
             </div>
             <div className={clsx(styles.description, { disabled: isAdding && !newIdeaName })}>
                 {!isAdding && !editing.description ? (
@@ -102,7 +102,7 @@ export default function IdeaCard({
                         <textarea
                             autoFocus={editing.description}
                             ref={descriptionInputRef}
-                            className={styles["text-input"]}
+                            className={clsx(styles["text-input"], "p-1!")}
                             placeholder="What's your idea?"
                             value={newIdeaDescription}
                             onKeyUp={handleKeyPress}

@@ -33,9 +33,10 @@ export default function IdeaBoard({ selectedCollection, onOpenSideBar }: IdeaBoa
     const params = useMemo<IdeasGetParams>(() => {
         return {
             order,
+            collection: selectedCollection?.id,
             sortBy: selectedSortByOption.value,
         };
-    }, [selectedSortByOption.value, order]);
+    }, [selectedSortByOption.value, order, selectedCollection]);
 
     function handleSortSelection(value: string) {
         const selection = sortByOptions.find((el) => el.value === value);
@@ -56,7 +57,7 @@ export default function IdeaBoard({ selectedCollection, onOpenSideBar }: IdeaBoa
 
     async function createIdea(data: IdeaPostData) {
         try {
-            const response = await postIdea(data);
+            const response = await postIdea({ ...data, collection: selectedCollection?.id });
             setIdeas((prev) => [response.data, ...(prev || [])]);
             setIsAdding(false);
         } catch (err: unknown) {
