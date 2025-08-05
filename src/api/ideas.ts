@@ -93,6 +93,8 @@ export async function putIdea(data: IdeaPutData, params: IdeaPutParams): Promise
         }
     }
 
+    ideaToUpate.lastModified = new Date().toISOString();
+
     localStorage.setItem("ideas", JSON.stringify([...ideas.filter((el) => el.id !== params.id), ideaToUpate]));
 
     return {
