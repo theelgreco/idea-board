@@ -7,7 +7,7 @@ import clsx from "clsx";
 export default function AddIdeaButton({ onClick }: AddIdeaButtonProps) {
     return (
         <>
-            <div className={clsx(styles["add-idea-button"], styles.widescreen)} onClick={onClick} tabIndex={1}>
+            <div data-testid="add-idea-btn" className={clsx(styles["add-idea-button"], styles.widescreen)} onClick={onClick} tabIndex={1}>
                 <MdAddCircle size={80} className={styles.icon} />
                 <p>New Idea</p>
             </div>

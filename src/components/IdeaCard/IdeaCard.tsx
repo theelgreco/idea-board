@@ -33,9 +33,16 @@ export default function IdeaCard({
         }, 200);
     }, []);
 
-    function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        if (e.key === "Escape" || e.key === "Enter") {
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const validNameCombination = e.key === "Escape" || e.key === "Enter";
+        const validDescriptionCombination = e.key === "Escape" || (e.shiftKey && e.key === "Enter");
+
+        if ((editing.name || isAdding) && validNameCombination) {
             nameInputRef.current?.blur();
+        }
+        if (editing.description && validDescriptionCombination) {
+            e.preventDefault(); // Prevent textarea from adding a new line
+            descriptionInputRef.current?.blur();
         }
     }
 
@@ -68,10 +75,10 @@ export default function IdeaCard({
     }
 
     return (
-        <div className={styles["idea-card"]}>
+        <div data-testid="idea" className={styles["idea-card"]}>
             <div className={styles.header}>
                 {!isAdding && !editing.name ? (
-                    <h1 className="w-full" onClick={() => setEditing({ name: true, description: false })}>
+                    <h1 data-testid="idea-name" className="w-full" onClick={() => setEditing({ name: true, description: false })}>
                         {name}
                     </h1>
                 ) : (
@@ -82,17 +89,17 @@ export default function IdeaCard({
                         autoFocus
                         placeholder="Enter idea name"
                         value={newIdeaName}
-                        onKeyUp={handleKeyPress}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => setNewIdeaName(e.target.value)}
                         onBlur={handleBlur}
                     />
                 )}
-                <IoMdTrash size={18} className={styles.icon} onClick={onDelete} />
+                <IoMdTrash data-testid="idea-delete" size={18} className={styles.icon} onClick={onDelete} />
             </div>
             <div className={clsx(styles.description, { disabled: isAdding && !newIdeaName })}>
                 {!isAdding && !editing.description ? (
                     <>
-                        <p className="h-full" onClick={() => setEditing({ name: false, description: true })}>
+                        <p data-testid="idea-description" className="h-full" onClick={() => setEditing({ name: false, description: true })}>
                             {description ? <span>{description}</span> : <span className={styles["no-description"]}>What's your idea?</span>}
                         </p>
                         <small className={styles["char-count"]}>{description.length} / 140</small>
@@ -105,7 +112,7 @@ export default function IdeaCard({
                             className={clsx(styles["text-input"], "p-1!")}
                             placeholder="What's your idea?"
                             value={newIdeaDescription}
-                            onKeyUp={handleKeyPress}
+                            onKeyDown={handleKeyDown}
                             onChange={handleDescriptionChange}
                             onBlur={handleBlur}
                         />
