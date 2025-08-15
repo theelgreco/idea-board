@@ -33,9 +33,15 @@ export default function IdeaCard({
         }, 200);
     }, []);
 
-    function handleKeyPress(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        if (e.key === "Escape" || e.key === "Enter") {
+    function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
+        const validNameCombination = e.key === "Escape" || e.key === "Enter";
+        const validDescriptionCombination = e.key === "Escape" || (e.shiftKey && e.key === "Enter");
+
+        if (editing.name && validNameCombination) {
             nameInputRef.current?.blur();
+        } else if (editing.description && validDescriptionCombination) {
+            e.preventDefault(); // Prevent textarea from adding a new line
+            descriptionInputRef.current?.blur();
         }
     }
 
@@ -82,7 +88,7 @@ export default function IdeaCard({
                         autoFocus
                         placeholder="Enter idea name"
                         value={newIdeaName}
-                        onKeyUp={handleKeyPress}
+                        onKeyDown={handleKeyDown}
                         onChange={(e) => setNewIdeaName(e.target.value)}
                         onBlur={handleBlur}
                     />
@@ -105,7 +111,7 @@ export default function IdeaCard({
                             className={clsx(styles["text-input"], "p-1!")}
                             placeholder="What's your idea?"
                             value={newIdeaDescription}
-                            onKeyUp={handleKeyPress}
+                            onKeyDown={handleKeyDown}
                             onChange={handleDescriptionChange}
                             onBlur={handleBlur}
                         />
