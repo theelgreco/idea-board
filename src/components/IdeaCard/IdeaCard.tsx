@@ -37,9 +37,10 @@ export default function IdeaCard({
         const validNameCombination = e.key === "Escape" || e.key === "Enter";
         const validDescriptionCombination = e.key === "Escape" || (e.shiftKey && e.key === "Enter");
 
-        if (editing.name && validNameCombination) {
+        if ((editing.name || isAdding) && validNameCombination) {
             nameInputRef.current?.blur();
-        } else if (editing.description && validDescriptionCombination) {
+        }
+        if (editing.description && validDescriptionCombination) {
             e.preventDefault(); // Prevent textarea from adding a new line
             descriptionInputRef.current?.blur();
         }
@@ -74,10 +75,10 @@ export default function IdeaCard({
     }
 
     return (
-        <div className={styles["idea-card"]}>
+        <div data-testid="idea" className={styles["idea-card"]}>
             <div className={styles.header}>
                 {!isAdding && !editing.name ? (
-                    <h1 className="w-full" onClick={() => setEditing({ name: true, description: false })}>
+                    <h1 data-testid="idea-name" className="w-full" onClick={() => setEditing({ name: true, description: false })}>
                         {name}
                     </h1>
                 ) : (
@@ -93,12 +94,12 @@ export default function IdeaCard({
                         onBlur={handleBlur}
                     />
                 )}
-                <IoMdTrash size={18} className={styles.icon} onClick={onDelete} />
+                <IoMdTrash data-testid="idea-delete" size={18} className={styles.icon} onClick={onDelete} />
             </div>
             <div className={clsx(styles.description, { disabled: isAdding && !newIdeaName })}>
                 {!isAdding && !editing.description ? (
                     <>
-                        <p className="h-full" onClick={() => setEditing({ name: false, description: true })}>
+                        <p data-testid="idea-description" className="h-full" onClick={() => setEditing({ name: false, description: true })}>
                             {description ? <span>{description}</span> : <span className={styles["no-description"]}>What's your idea?</span>}
                         </p>
                         <small className={styles["char-count"]}>{description.length} / 140</small>
