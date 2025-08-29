@@ -26,9 +26,8 @@ function App() {
         try {
             const response = await getCollections();
             setCollections(response.data);
-        } catch (err: unknown) {
-            // TO-DO: handle this properly
-            console.error(err);
+        } catch {
+            toast.error("An error occurred while fetching collections. Try again.");
         }
     }
 
@@ -73,7 +72,9 @@ function App() {
                 }
             }
         } catch (err: unknown) {
-            console.error(err);
+            if (err instanceof Error) {
+                toast.error(err.message);
+            }
         }
     }
 
@@ -87,7 +88,9 @@ function App() {
                 }
             }
         } catch (err: unknown) {
-            console.error(err);
+            if (err instanceof Error) {
+                toast.error(err.message);
+            }
         }
     }
 
