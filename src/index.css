@@ -169,24 +169,3 @@ dialog::backdrop {
 dialog:not([open]) {
     display: none;
 }
-
-/* input[type="text"] {
-    outline: 1px solid var(--color-stone-500);
-}
-
-input[type="text"] {
-    outline: 1px solid var(--color-stone-500);
-    padding: 0.5rem;
-    background-color: var(--color-stone-900);
-}
-
-input[type="text"]:focus {
-    outline: 1px solid var(--color-stone-500);
-    padding: 0.5rem;
-    background-color: var(--color-stone-900);
-}
-
-input[type="text"].error {
-    outline: 1px solid var(--color-red-400);
-}
-*/
