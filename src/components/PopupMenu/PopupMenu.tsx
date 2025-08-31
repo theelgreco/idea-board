@@ -7,28 +7,8 @@ import type { PopupMenuProps } from "./types";
 export default function PopupMenu({ items, selectedItem, Icon, iconPosition, iconProps, onSelection, ...rest }: PopupMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
 
-    function closePopupMenu() {
-        if (isOpen) {
-            setIsOpen(false);
-        }
-    }
-
-    function openPopupMenu() {
-        if (!isOpen) {
-            setIsOpen(true);
-        }
-    }
-
     function togglePopupMenu() {
-        if (isOpen) {
-            closePopupMenu();
-        } else {
-            openPopupMenu();
-        }
-    }
-
-    function handleDocumentClick() {
-        closePopupMenu();
+        setIsOpen(!isOpen);
     }
 
     function handleContainerClick(e: React.MouseEvent<HTMLDivElement>) {
@@ -36,10 +16,10 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
     }
 
     useEffect(() => {
-        document.addEventListener("click", handleDocumentClick);
+        document.addEventListener("click", () => setIsOpen(false));
 
         return () => {
-            document.removeEventListener("click", handleDocumentClick);
+            document.removeEventListener("click", () => setIsOpen(false));
         };
     });
 
@@ -55,17 +35,17 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
                 onClick={togglePopupMenu}
             />
             <div className={clsx(styles["popup-menu"], { [styles.open]: isOpen })}>
-                {items.map((el) => (
+                {items.map((item) => (
                     <Button
                         variant="plain"
-                        key={el.value}
-                        className={clsx(styles["popup-menu-item"], { [styles.selected]: el.value === selectedItem?.value })}
+                        key={item.value}
+                        className={clsx(styles["popup-menu-item"], { [styles.selected]: item.value === selectedItem?.value })}
                         onClick={() => {
                             setIsOpen(false);
-                            onSelection(el.value);
+                            onSelection(item.value);
                         }}
                     >
-                        {el.label}
+                        {item.label}
                     </Button>
                 ))}
             </div>
