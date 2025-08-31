@@ -7,12 +7,12 @@ import CollectionList from "../CollectionList/CollectionList";
 
 export interface SideBarProps {
     isSideBarOpen: boolean;
-    setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     selectedCollection: Collection | null;
+    setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setSelectedCollection: React.Dispatch<React.SetStateAction<Collection | null>>;
 }
 
-export default function SideBar({ isSideBarOpen, setIsSideBarOpen, selectedCollection, setSelectedCollection }: SideBarProps) {
+export default function SideBar({ isSideBarOpen, selectedCollection, setIsSideBarOpen, setSelectedCollection }: SideBarProps) {
     const [isAddingCollection, setIsAddingCollection] = useState(false);
     const [isSubmittingCollection, setIsSubmittingCollection] = useState(false);
 

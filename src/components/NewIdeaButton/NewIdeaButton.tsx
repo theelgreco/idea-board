@@ -11,7 +11,7 @@ export default function NewIdeaButton({ setIsAdding }: NewIdeaButtonProps) {
             {/* "New Idea" Button - Widescreen */}
             <Button
                 variant="plain"
-                className="flex flex-col justify-center w-[var(--idea-card-size)] aspect-square text-stone-500 text-xl! border border-dashed focus:outline outline-white max-sm:hidden!"
+                className="flex flex-col justify-center w-[var(--idea-card-size)] max-w-[var(--idea-card-size)] h-[var(--idea-card-size)] max-h-[var(--idea-card-size)]  text-stone-500 text-xl! border border-dashed focus:outline outline-white max-sm:hidden!"
                 onClick={() => setIsAdding(true)}
                 Icon={MdAddCircle}
                 iconProps={{ size: 80, className: "text-stone-600" }}
