@@ -40,7 +40,7 @@ export async function postCollection(data: CollectionPostData): Promise<MockHttp
 
     const collections = JSON.parse(localStorageGetOrCreate("collections", JSON.stringify([]))) as Collection[];
 
-    if (collections.some((el) => el.name === data.name)) {
+    if (collections.some((collection) => collection.name === data.name)) {
         throw new UniqueConstraintError({ fields: ["name"] });
     }
 
@@ -59,9 +59,9 @@ export async function patchCollection(data: CollectionPatchData, params: Collect
 
     const collections = JSON.parse(localStorageGetOrCreate("collections", JSON.stringify([]))) as Collection[];
 
-    const collectionToUpate = collections.find((el) => el.id === params.id);
+    const collectionToUpate = collections.find((collection) => collection.id === params.id);
 
-    if (collections.some((el) => el.name === data.name)) {
+    if (collections.some((collection) => collection.name === data.name)) {
         throw new UniqueConstraintError({ fields: ["name"] });
     }
 
@@ -71,7 +71,10 @@ export async function patchCollection(data: CollectionPatchData, params: Collect
 
     const updatedCollection = { ...collectionToUpate, name: data.name };
 
-    localStorage.setItem("collections", JSON.stringify([...collections.filter((el) => el.id !== params.id), updatedCollection]));
+    localStorage.setItem(
+        "collections",
+        JSON.stringify([...collections.filter((collection) => collection.id !== params.id), updatedCollection])
+    );
 
     return {
         status: HttpStatusCode.OK,
@@ -84,11 +87,11 @@ export async function deleteCollection(params: CollectionDeleteParams): Promise<
 
     const collections = JSON.parse(localStorageGetOrCreate("collections", JSON.stringify([]))) as Collection[];
 
-    if (!collections.find((el) => el.id === params.id)) {
+    if (!collections.find((collection) => collection.id === params.id)) {
         throw new Error("Invalid ID provided");
     }
 
-    localStorage.setItem("collections", JSON.stringify(collections.filter((el) => el.id !== params.id)));
+    localStorage.setItem("collections", JSON.stringify(collections.filter((collection) => collection.id !== params.id)));
 
     return {
         status: HttpStatusCode.NO_CONTENT,

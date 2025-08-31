@@ -43,7 +43,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
     async function removeIdea(data: IdeaDeleteParams) {
         try {
             await deleteIdea(data);
-            setIdeas((prev) => (prev || []).filter((el) => el.id !== data.id));
+            setIdeas((prev) => (prev || []).filter((idea) => idea.id !== data.id));
         } catch (err: unknown) {
             console.error(err);
         }
@@ -54,7 +54,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
             const response = await putIdea(data, params);
 
             setIdeas((prev) => {
-                return (prev || [])?.map((el) => (el.id === params.id ? response.data : el));
+                return (prev || [])?.map((idea) => (idea.id === params.id ? response.data : idea));
             });
         } catch (err: unknown) {
             console.error(err);

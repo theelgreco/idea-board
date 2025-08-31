@@ -79,7 +79,7 @@ export async function putIdea(data: IdeaPutData, params: IdeaPutParams): Promise
 
     const ideas = JSON.parse(localStorageGetOrCreate("ideas", JSON.stringify([]))) as Idea[];
 
-    const ideaToUpate = ideas.find((el) => el.id === params.id);
+    const ideaToUpate = ideas.find((idea) => idea.id === params.id);
 
     if (!ideaToUpate) {
         throw new Error("Invalid ID provided");
@@ -95,7 +95,7 @@ export async function putIdea(data: IdeaPutData, params: IdeaPutParams): Promise
 
     ideaToUpate.lastModified = new Date().toISOString();
 
-    localStorage.setItem("ideas", JSON.stringify([...ideas.filter((el) => el.id !== params.id), ideaToUpate]));
+    localStorage.setItem("ideas", JSON.stringify([...ideas.filter((idea) => idea.id !== params.id), ideaToUpate]));
 
     return {
         status: HttpStatusCode.OK,
@@ -108,11 +108,11 @@ export async function deleteIdea(params: IdeaDeleteParams): Promise<MockHttpResp
 
     const ideas = JSON.parse(localStorageGetOrCreate("ideas", JSON.stringify([]))) as Idea[];
 
-    if (!ideas.find((el) => el.id === params.id)) {
+    if (!ideas.find((idea) => idea.id === params.id)) {
         throw new Error("Invalid ID provided");
     }
 
-    localStorage.setItem("ideas", JSON.stringify(ideas.filter((el) => el.id !== params.id)));
+    localStorage.setItem("ideas", JSON.stringify(ideas.filter((idea) => idea.id !== params.id)));
 
     return {
         status: HttpStatusCode.NO_CONTENT,

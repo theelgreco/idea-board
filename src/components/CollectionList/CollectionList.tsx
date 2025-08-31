@@ -70,7 +70,7 @@ export default function CollectionList({
         try {
             await deleteCollection({ id });
             if (collections) {
-                setCollections(collections.filter((el) => el.id !== id));
+                setCollections(collections.filter((collection) => collection.id !== id));
                 if (selectedCollection && selectedCollection.id === id) {
                     setSelectedCollection(null);
                 }
