@@ -103,7 +103,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                     setSelectedSortByOption={setSelectedSortByOption}
                 />
             </div>
-            <div className="flex gap-10 flex-wrap px-8! py-5! flex-grow overflow-auto">
+            <div className="flex gap-10 flex-wrap px-8! py-5! overflow-auto">
                 {!isAdding && <NewIdeaButton setIsAdding={setIsAdding} />}
                 {isAdding && (
                     <IdeaCard
