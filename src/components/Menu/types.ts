@@ -14,7 +14,7 @@ export interface MenuItem {
     editable?: boolean;
 }
 
-export interface MenuItemProps extends React.AllHTMLAttributes<HTMLDivElement> {
+export interface MenuItemProps extends React.AllHTMLAttributes<HTMLButtonElement> {
     item?: MenuItem;
     selected?: boolean;
     isAdding?: boolean;

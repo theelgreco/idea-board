@@ -24,7 +24,7 @@ function App() {
                     selectedCollection={selectedCollection}
                     setSelectedCollection={setSelectedCollection}
                 />
-                <IdeaBoard selectedCollection={selectedCollection} onOpenSideBar={() => setIsSideBarOpen(true)} />
+                <IdeaBoard selectedCollection={selectedCollection} setIsSideBarOpen={setIsSideBarOpen} />
             </main>
             <Toaster position="top-right" richColors />
         </>
