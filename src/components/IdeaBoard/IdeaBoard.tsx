@@ -12,12 +12,12 @@ import {
     type IdeaPutData,
     type IdeaPutParams,
 } from "@/api/ideas";
-import type { IdeaBoardProps, OrderChoices, SortByMenuItem } from "./types";
+import type { IdeaBoardProps, OrderChoices, SortByCollection } from "./types";
 import type { IdeaCardSaveArgs } from "../IdeaCard/types";
 import SortControls from "../SortControls/SortControls";
 import NewIdeaButton from "../NewIdeaButton/NewIdeaButton";
 
-const sortByOptions: SortByMenuItem[] = [
+const sortByOptions: SortByCollection[] = [
     { label: "Created At", value: "createdAt" },
     { label: "Name", value: "name" },
 ];
@@ -26,7 +26,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
     const [ideas, setIdeas] = useState<Idea[] | null>(null);
     const [isAdding, setIsAdding] = useState(false);
     const [order, setOrder] = useState<OrderChoices>("desc");
-    const [selectedSortByOption, setSelectedSortByOption] = useState<SortByMenuItem>(sortByOptions[0]);
+    const [selectedSortByOption, setSelectedSortByOption] = useState<SortByCollection>(sortByOptions[0]);
 
     async function createIdea(data: IdeaCardSaveArgs) {
         if (data.name) {

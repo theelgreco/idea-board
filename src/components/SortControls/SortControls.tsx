@@ -2,14 +2,14 @@ import { IoMdFunnel } from "react-icons/io";
 import Button from "../Button/Button";
 import PopupMenu from "../PopupMenu/PopupMenu";
 import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
-import type { OrderChoices, SortByMenuItem } from "../IdeaBoard/types";
+import type { OrderChoices, SortByCollection } from "../IdeaBoard/types";
 
 interface SortControlsProps {
     order: OrderChoices;
     setOrder: React.Dispatch<React.SetStateAction<OrderChoices>>;
-    sortByOptions: SortByMenuItem[];
-    selectedSortByOption: SortByMenuItem;
-    setSelectedSortByOption: React.Dispatch<React.SetStateAction<SortByMenuItem>>;
+    sortByOptions: SortByCollection[];
+    selectedSortByOption: SortByCollection;
+    setSelectedSortByOption: React.Dispatch<React.SetStateAction<SortByCollection>>;
 }
 
 export default function SortControls({ order, setOrder, sortByOptions, selectedSortByOption, setSelectedSortByOption }: SortControlsProps) {

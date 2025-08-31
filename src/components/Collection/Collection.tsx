@@ -1,26 +1,36 @@
 import clsx from "clsx";
-import type { MenuItemProps } from "./types";
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./MenuItem.module.css";
+import React, { useRef, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Button from "../Button/Button";
+import type { Collection } from "@/api/collections";
 
-export default function MenuItem({
-    item,
+export interface CollectionProps extends React.AllHTMLAttributes<HTMLButtonElement> {
+    collection?: Collection;
+    selected?: boolean;
+    isNew?: boolean;
+    isEditable?: boolean;
+    onCreate?: (value: string) => void;
+    onEdit?: (value: string) => void;
+    onDelete?: () => void;
+}
+
+export default function Collection({
+    collection,
     selected,
     isNew,
+    isEditable = true,
     onCreate = () => {},
     onEdit = () => {},
     onDelete = () => {},
     ...rest
-}: MenuItemProps) {
-    const [isEditing, setIsEditing] = useState(false);
-    const [inputValue, setInputValue] = useState(item?.label || "");
+}: CollectionProps) {
+    const [isEditing, setIsEditing] = useState(isNew);
+    const [inputValue, setInputValue] = useState(collection?.name || "");
     const [isHovered, setIsHovered] = useState(false);
     const inputRef = useRef<HTMLInputElement>(null);
 
     function toggleEdit() {
-        if (!isEditing && item?.editable) {
+        if (!isEditing && isEditable) {
             setIsEditing(true);
         }
     }
@@ -32,37 +42,27 @@ export default function MenuItem({
     }
 
     function handleBlur() {
-        // New item
         if (isNew) {
             onCreate(inputValue);
-        }
+        } else if (collection && isEditable) {
+            const hasChanged = inputValue && inputValue !== collection.name;
 
-        // Existing item
-        if (item) {
-            // Has changed
-            if (inputValue && inputValue !== item.label) {
+            if (hasChanged) {
                 onEdit(inputValue);
             } else {
-                setInputValue(item.label);
+                setInputValue(collection.name);
             }
-
-            setIsEditing(false);
         }
+
+        setIsEditing(false);
     }
-
-    useEffect(() => {
-        if (isNew) {
-            setIsEditing(true);
-        }
-    }, [isNew]);
 
     return (
         <Button
             variant="plain"
             className={clsx(
                 "flex items-center justify-between gap-3 px-5! py-3! cursor-pointer transition-colors select-none disabled:opacity-50 disabled:cursor-not-allowed hover:bg-stone-900 focus-visible:bg-stone-900 rounded-lg! text-sm!",
-                styles["menu-item"],
-                { "bg-stone-900 sticky top-0 bottom-0": selected }
+                { "bg-stone-900 sticky top-0 bottom-0": selected, "outline! outline-white! bg-stone-900/50!": isEditing }
             )}
             onDoubleClick={toggleEdit}
             onPointerEnter={() => setIsHovered(true)}
@@ -70,12 +70,12 @@ export default function MenuItem({
             {...rest}
             type="button"
         >
-            {isEditing && (item?.editable || isNew) ? (
+            {isEditing && (isEditable || isNew) ? (
                 <input
                     ref={inputRef}
                     type="text"
                     placeholder="Enter Collection Name"
-                    className={clsx({ [styles.editing]: isEditing })}
+                    className={clsx({ "outline-0! w-full": isEditing })}
                     onBlur={handleBlur}
                     autoFocus
                     value={inputValue}
@@ -84,8 +84,8 @@ export default function MenuItem({
                 />
             ) : (
                 <>
-                    <span>{item?.label}</span>
-                    {(isHovered || selected) && item?.editable && (
+                    <span>{collection?.name}</span>
+                    {(isHovered || selected) && isEditable && (
                         <div className="flex gap-2">
                             <MdEdit
                                 tabIndex={0}

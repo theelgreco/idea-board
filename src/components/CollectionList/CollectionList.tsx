@@ -1,13 +1,13 @@
-import { deleteCollection, getCollections, patchCollection, postCollection, type Collection } from "@/api/collections";
+import { deleteCollection, getCollections, patchCollection, postCollection, type Collection as CollectionType } from "@/api/collections";
 import { UniqueConstraintError } from "@/utils/errors";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import MenuItem from "../Menu/MenuItem";
+import Collection from "../Collection/Collection";
 
 interface CollectionListProps {
-    selectedCollection: Collection | null;
+    selectedCollection: CollectionType | null;
     isAddingCollection: boolean;
-    setSelectedCollection: React.Dispatch<React.SetStateAction<Collection | null>>;
+    setSelectedCollection: React.Dispatch<React.SetStateAction<CollectionType | null>>;
     setIsSubmittingCollection: React.Dispatch<React.SetStateAction<boolean>>;
     setIsAddingCollection: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -19,15 +19,7 @@ export default function CollectionList({
     setIsSubmittingCollection,
     setIsAddingCollection,
 }: CollectionListProps) {
-    const [collections, setCollections] = useState<Collection[] | null>(null);
-
-    const menuItems = [
-        ...(collections || []).map((el) => ({
-            label: el.name,
-            value: el.id,
-            editable: true,
-        })),
-    ];
+    const [collections, setCollections] = useState<CollectionType[] | null>(null);
 
     async function createCollection(name: string) {
         try {
@@ -106,26 +98,28 @@ export default function CollectionList({
     return (
         <div className="flex flex-col gap-2 max-h-full overflow-y-auto p-1">
             <div className="flex flex-col gap-2">
-                <MenuItem
-                    item={{ label: "All Ideas", value: "all", editable: false }}
+                {/* Default "All Ideas" collection */}
+                <Collection
+                    collection={{ id: "all", name: "All Ideas", createdAt: "" }}
+                    isEditable={false}
                     selected={!selectedCollection}
                     onClick={() => setSelectedCollection(null)}
                 />
-                {menuItems?.map((menuItem) => {
-                    return (
-                        <MenuItem
-                            key={menuItem.value}
-                            item={menuItem}
-                            selected={selectedCollection?.id === menuItem.value}
-                            onClick={() =>
-                                setSelectedCollection(collections?.find((collection) => collection.id === menuItem.value) || null)
-                            }
-                            onEdit={(name) => updateCollection(name, menuItem.value)}
-                            onDelete={() => removeCollection(menuItem.value)}
-                        />
-                    );
-                })}
-                {isAddingCollection && <MenuItem isNew={true} onCreate={(name) => handleOnCreate(name)} />}
+                {collections &&
+                    collections.map((collection) => {
+                        return (
+                            <Collection
+                                key={collection.id}
+                                collection={collection}
+                                selected={selectedCollection?.id === collection.id}
+                                onClick={() => setSelectedCollection(collection)}
+                                onEdit={(name) => updateCollection(name, collection.id)}
+                                onDelete={() => removeCollection(collection.id)}
+                            />
+                        );
+                    })}
+                {/* New Collection */}
+                {isAddingCollection && <Collection isNew={true} onCreate={(name) => handleOnCreate(name)} />}
             </div>
         </div>
     );
