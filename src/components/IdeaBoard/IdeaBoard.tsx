@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import IdeaCard from "../IdeaCard/IdeaCard";
 import Button from "../Button/Button";
-import { MdAddCircle, MdCreate, MdMenu } from "react-icons/md";
+import { MdMenu } from "react-icons/md";
 import {
     deleteIdea,
     getIdeas,
@@ -15,6 +15,7 @@ import {
 import type { IdeaBoardProps, OrderChoices, SortByMenuItem } from "./types";
 import type { IdeaCardSaveArgs } from "../IdeaCard/types";
 import SortControls from "../SortControls/SortControls";
+import NewIdeaButton from "../NewIdeaButton/NewIdeaButton";
 
 const sortByOptions: SortByMenuItem[] = [
     { label: "Created At", value: "createdAt" },
@@ -103,26 +104,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                 />
             </div>
             <div className="flex gap-10 flex-wrap px-8! py-5! flex-grow overflow-auto">
-                {!isAdding && (
-                    <>
-                        {/* "New Idea" Button - Widescreen */}
-                        <Button
-                            variant="plain"
-                            className="flex flex-col justify-center w-[var(--idea-card-size)] aspect-square text-stone-500 text-xl! border border-dashed focus:outline outline-white max-sm:hidden!"
-                            onClick={() => setIsAdding(true)}
-                            Icon={MdAddCircle}
-                            iconProps={{ size: 80, className: "text-stone-600" }}
-                            text="New Idea"
-                        />
-                        {/* "New Idea" Button - Mobile */}
-                        <Button
-                            Icon={MdCreate}
-                            variant="primary"
-                            className="fixed bottom-[20px] right-[20px] rounded-full aspect-square sm:hidden!"
-                            onClick={() => setIsAdding(true)}
-                        />
-                    </>
-                )}
+                {!isAdding && <NewIdeaButton setIsAdding={setIsAdding} />}
                 {isAdding && (
                     <IdeaCard
                         isNew={true}
