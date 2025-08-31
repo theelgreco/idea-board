@@ -3,7 +3,7 @@ import type { PopupMenuItem } from "../PopupMenu/types";
 
 export interface IdeaBoardProps {
     selectedCollection: Collection | null;
-    onOpenSideBar: () => void;
+    setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type OrderChoices = "asc" | "desc";
