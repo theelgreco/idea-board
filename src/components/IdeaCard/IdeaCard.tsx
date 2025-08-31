@@ -21,7 +21,7 @@ export default function IdeaCard({ idea, isNew, onSave, onDelete }: IdeaCardProp
 
     const throttledSetMaxCountExceeded = useMemo(() => {
         return throttle(() => {
-            setMaxCountExceeded((prev) => !prev);
+            setMaxCountExceeded((previousValue) => !previousValue);
         }, 200);
     }, []);
 
