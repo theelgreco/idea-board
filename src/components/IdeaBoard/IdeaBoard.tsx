@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import IdeaCard from "../IdeaCard/IdeaCard";
 import Button from "../Button/Button";
-import { MdArrowDownward, MdArrowUpward, MdMenu } from "react-icons/md";
-import { IoMdFunnel } from "react-icons/io";
-import PopupMenu from "../PopupMenu/PopupMenu";
+import { MdMenu } from "react-icons/md";
 import {
     deleteIdea,
     getIdeas,
@@ -11,57 +9,34 @@ import {
     putIdea,
     type Idea,
     type IdeaDeleteParams,
-    type IdeaPostData,
     type IdeaPutData,
     type IdeaPutParams,
-    type IdeasGetParams,
 } from "@/api/ideas";
-import AddIdeaButton from "../AddIdeaButton/AddIdeaButton";
-import type { IdeaBoardProps, OrderChoices, SortByMenuItem } from "./types";
+import type { IdeaBoardProps, OrderChoices, SortByCollection } from "./types";
+import type { IdeaCardSaveArgs } from "../IdeaCard/types";
+import SortControls from "../SortControls/SortControls";
+import NewIdeaButton from "../NewIdeaButton/NewIdeaButton";
 
-const sortByOptions: SortByMenuItem[] = [
+const sortByOptions: SortByCollection[] = [
     { label: "Created At", value: "createdAt" },
     { label: "Name", value: "name" },
 ];
 
-export default function IdeaBoard({ selectedCollection, onOpenSideBar }: IdeaBoardProps) {
+export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: IdeaBoardProps) {
     const [ideas, setIdeas] = useState<Idea[] | null>(null);
     const [isAdding, setIsAdding] = useState(false);
     const [order, setOrder] = useState<OrderChoices>("desc");
-    const [selectedSortByOption, setSelectedSortByOption] = useState<SortByMenuItem>(sortByOptions[0]);
+    const [selectedSortByOption, setSelectedSortByOption] = useState<SortByCollection>(sortByOptions[0]);
 
-    const params = useMemo<IdeasGetParams>(() => {
-        return {
-            order,
-            collection: selectedCollection?.id,
-            sortBy: selectedSortByOption.value,
-        };
-    }, [selectedSortByOption.value, order, selectedCollection]);
-
-    function handleSortSelection(value: string) {
-        const selection = sortByOptions.find((el) => el.value === value);
-
-        if (selection) {
-            setSelectedSortByOption(selection);
-        }
-    }
-
-    const fetchIdeas = useCallback(async () => {
-        try {
-            const response = await getIdeas(params);
-            setIdeas(response.data);
-        } catch (err: unknown) {
-            console.error(err);
-        }
-    }, [params]);
-
-    async function createIdea(data: IdeaPostData) {
-        try {
-            const response = await postIdea({ ...data, collection: selectedCollection?.id });
-            setIdeas((prev) => [response.data, ...(prev || [])]);
-            setIsAdding(false);
-        } catch (err: unknown) {
-            console.error(err);
+    async function createIdea(data: IdeaCardSaveArgs) {
+        if (data.name) {
+            try {
+                const response = await postIdea({ name: data.name, collection: selectedCollection?.id });
+                setIdeas((prev) => [response.data, ...(prev || [])]);
+                setIsAdding(false);
+            } catch (err: unknown) {
+                console.error(err);
+            }
         }
     }
 
@@ -87,55 +62,68 @@ export default function IdeaBoard({ selectedCollection, onOpenSideBar }: IdeaBoa
     }
 
     useEffect(() => {
+        async function fetchIdeas() {
+            const params = {
+                order,
+                collection: selectedCollection?.id,
+                sortBy: selectedSortByOption.value,
+            };
+
+            try {
+                const response = await getIdeas(params);
+                setIdeas(response.data);
+            } catch (err: unknown) {
+                console.error(err);
+            }
+        }
+
         fetchIdeas();
-    }, [fetchIdeas]);
+    }, [order, selectedCollection, selectedSortByOption]);
 
     return (
-        <section className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
+        <main className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
             <div className="w-full flex justify-between px-5 py-3 sm:px-8 sm:py-5 bg-[#222222]">
                 <div className="flex items-center gap-5 max-w-full overflow-hidden">
-                    <MdMenu className="sm:hidden cursor-pointer min-w-[24px]" onClick={onOpenSideBar} size={24} />
+                    <Button
+                        Icon={MdMenu}
+                        iconProps={{ size: 24 }}
+                        variant="plain"
+                        className="sm:hidden! cursor-pointer min-w-[24px]! p-0!"
+                        onClick={() => setIsSideBarOpen(true)}
+                    />
                     <h1 className="font-semibold text-2xl text-ellipsis text-nowrap overflow-hidden">
                         {selectedCollection?.name || "All Ideas"}
                     </h1>
                 </div>
-                <div className="flex items-center gap-1.5 text-nowrap">
-                    <PopupMenu
-                        items={sortByOptions}
-                        selectedItem={selectedSortByOption}
-                        Icon={IoMdFunnel}
-                        onSelection={handleSortSelection}
-                    />
-                    <div className="h-full w-[1px] border-l border-l-stone-600"></div>
-                    <Button
-                        Icon={order === "asc" ? MdArrowUpward : MdArrowDownward}
-                        text=""
-                        variant="plain"
-                        className="p-2!"
-                        onClick={() => (order === "asc" ? setOrder("desc") : setOrder("asc"))}
-                    />
-                </div>
+                <SortControls
+                    order={order}
+                    setOrder={setOrder}
+                    sortByOptions={sortByOptions}
+                    selectedSortByOption={selectedSortByOption}
+                    setSelectedSortByOption={setSelectedSortByOption}
+                />
             </div>
-            <div className="px-8! py-5! flex-grow overflow-auto">
-                <div className="flex gap-10 flex-wrap">
-                    <AddIdeaButton onClick={() => setIsAdding(true)} />
-                    {isAdding && (
-                        <IdeaCard name="" description="" isAdding={isAdding} onCreate={createIdea} onCancel={() => setIsAdding(false)} />
-                    )}
-                    {ideas &&
-                        ideas.map((el) => (
-                            <IdeaCard
-                                key={el.id}
-                                name={el.name}
-                                description={el.description}
-                                createdAt={el.createdAt}
-                                lastModified={el.lastModified}
-                                onDelete={() => removeIdea({ id: el.id })}
-                                onSave={(data) => editIdea(data, { id: el.id })}
-                            />
-                        ))}
-                </div>
+            <div className="flex gap-10 flex-wrap px-8! py-5! overflow-auto">
+                {!isAdding && <NewIdeaButton setIsAdding={setIsAdding} />}
+                {isAdding && (
+                    <IdeaCard
+                        isNew={true}
+                        onSave={(newIdea) => {
+                            createIdea(newIdea);
+                            setIsAdding(false);
+                        }}
+                    />
+                )}
+                {ideas &&
+                    ideas.map((idea) => (
+                        <IdeaCard
+                            key={idea.id}
+                            idea={idea}
+                            onSave={(data) => editIdea(data, { id: idea.id })}
+                            onDelete={() => removeIdea({ id: idea.id })}
+                        />
+                    ))}
             </div>
-        </section>
+        </main>
     );
 }

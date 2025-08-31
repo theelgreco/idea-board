@@ -1,4 +1,4 @@
-import type { IdeaCardProps } from "./types";
+import type { IdeaCardProps, IdeaCardSaveArgs } from "./types";
 import styles from "./IdeaCard.module.css";
 import { formatRelative } from "date-fns";
 import { useMemo, useRef, useState } from "react";
@@ -6,62 +6,48 @@ import { DESCRIPTION_MAX_CHAR_COUNT } from "@/utils/constants";
 import clsx from "clsx";
 import throttle from "@/utils/throttle";
 import { IoMdTrash } from "react-icons/io";
+import Button from "../Button/Button";
 
-export default function IdeaCard({
-    name,
-    description,
-    createdAt,
-    lastModified,
-    isAdding,
-    onCreate,
-    onSave,
-    onDelete,
-    onCancel,
-}: IdeaCardProps) {
-    const [newIdeaName, setNewIdeaName] = useState(name);
-    const [newIdeaDescription, setNewIdeaDescription] = useState(description);
+export default function IdeaCard({ idea, isNew, onSave, onDelete = () => {} }: IdeaCardProps) {
+    const [newIdeaName, setNewIdeaName] = useState(idea?.name || "");
+    const [newIdeaDescription, setNewIdeaDescription] = useState(idea?.description || "");
     const [maxCountExceeded, setMaxCountExceeded] = useState(false);
-    const [editing, setEditing] = useState({ name: false, description: false });
+
     const nameInputRef = useRef<HTMLInputElement>(null);
     const descriptionInputRef = useRef<HTMLTextAreaElement>(null);
-    const createdAtString = createdAt ? formatRelative(new Date(createdAt), new Date()) : null;
-    const lastModifiedString = lastModified ? formatRelative(new Date(lastModified), new Date()) : null;
 
-    const debouncedSetMaxCountExceeded = useMemo(() => {
+    const createdAtString = idea?.createdAt ? formatRelative(new Date(idea.createdAt), new Date()) : null;
+    const lastModifiedString = idea?.lastModified ? formatRelative(new Date(idea.lastModified), new Date()) : null;
+
+    const throttledSetMaxCountExceeded = useMemo(() => {
         return throttle(() => {
-            setMaxCountExceeded((prev) => !prev);
+            setMaxCountExceeded((previousValue) => !previousValue);
         }, 200);
     }, []);
 
     function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        const validNameCombination = e.key === "Escape" || e.key === "Enter";
-        const validDescriptionCombination = e.key === "Escape" || (e.shiftKey && e.key === "Enter");
+        const isValidKeyCombination = e.key === "Enter" || e.key === "Escape" || (e.shiftKey && e.key === "Enter");
 
-        if ((editing.name || isAdding) && validNameCombination) {
-            nameInputRef.current?.blur();
-        }
-        if (editing.description && validDescriptionCombination) {
-            e.preventDefault(); // Prevent textarea from adding a new line
-            descriptionInputRef.current?.blur();
+        if (isValidKeyCombination) {
+            const element = e.target as HTMLInputElement | HTMLTextAreaElement;
+            element.blur();
         }
     }
 
-    function handleBlur(e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) {
-        e.stopPropagation();
+    function handleSave() {
+        const postData: IdeaCardSaveArgs = { name: undefined, description: undefined };
 
-        if (isAdding) {
-            if (!newIdeaName) {
-                onCancel?.();
-            } else {
-                onCreate?.({ name: newIdeaName, description: "" });
-            }
-        } else {
-            setEditing({ name: false, description: false });
+        // Reset back to original values if either name or description is blank
+        if (!newIdeaName && idea) setNewIdeaName(idea?.name || "");
+        if (!newIdeaDescription && idea) setNewIdeaDescription(idea?.description || "");
 
-            if (newIdeaName || newIdeaDescription) {
-                onSave?.({ name: newIdeaName, description: newIdeaDescription });
-            }
+        if (newIdeaName !== idea?.name) {
+            postData.name = newIdeaName;
+        } else if (newIdeaDescription !== idea?.description) {
+            postData.description = newIdeaDescription;
         }
+
+        onSave(postData);
     }
 
     function handleDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
@@ -69,69 +55,56 @@ export default function IdeaCard({
             setNewIdeaDescription(e.target.value);
         }
 
+        // If the user is typing when the description is max length, the char count does a shake animation.
         if (e.target.value.length >= DESCRIPTION_MAX_CHAR_COUNT) {
-            debouncedSetMaxCountExceeded();
+            throttledSetMaxCountExceeded();
         }
     }
 
     return (
-        <div data-testid="idea" className={styles["idea-card"]}>
-            <div className={styles.header}>
-                {!isAdding && !editing.name ? (
-                    <h1 data-testid="idea-name" className="w-full" onClick={() => setEditing({ name: true, description: false })}>
-                        {name}
-                    </h1>
-                ) : (
-                    <input
-                        ref={nameInputRef}
-                        className={clsx(styles["text-input"], "p-1! mr-2!")}
-                        type="text"
-                        autoFocus
-                        placeholder="Enter idea name"
-                        value={newIdeaName}
-                        onKeyDown={handleKeyDown}
-                        onChange={(e) => setNewIdeaName(e.target.value)}
-                        onBlur={handleBlur}
-                    />
+        <article className={styles["idea-card"]}>
+            <header className={styles.header}>
+                <input
+                    ref={nameInputRef}
+                    className={clsx(styles["text-input"], "p-1! mr-2!")}
+                    type="text"
+                    autoFocus={isNew} // Only autofocus if there is no name, i.e when first adding.
+                    placeholder="Enter idea name"
+                    value={newIdeaName}
+                    onKeyDown={handleKeyDown}
+                    onChange={(e) => setNewIdeaName(e.target.value)}
+                    onBlur={handleSave}
+                />
+                {!isNew && (
+                    <Button variant="plain" className="px-2!" onClick={onDelete}>
+                        <IoMdTrash size={18} className={styles.icon} />
+                    </Button>
                 )}
-                <IoMdTrash data-testid="idea-delete" size={18} className={styles.icon} onClick={onDelete} />
+            </header>
+            <div className={clsx(styles.description)}>
+                <textarea
+                    ref={descriptionInputRef}
+                    className={clsx(styles["text-input"], "p-1!")}
+                    placeholder="What's your idea?"
+                    value={newIdeaDescription}
+                    onKeyDown={handleKeyDown}
+                    onChange={handleDescriptionChange}
+                    onBlur={handleSave}
+                />
+                <small
+                    className={clsx(styles["char-count"], {
+                        [styles.warning]: newIdeaDescription?.length > 120,
+                        [styles.danger]: newIdeaDescription?.length > 130,
+                        [styles.max]: maxCountExceeded,
+                    })}
+                >
+                    {newIdeaDescription.length} / 140
+                </small>
             </div>
-            <div className={clsx(styles.description, { disabled: isAdding && !newIdeaName })}>
-                {!isAdding && !editing.description ? (
-                    <>
-                        <p data-testid="idea-description" className="h-full" onClick={() => setEditing({ name: false, description: true })}>
-                            {description ? <span>{description}</span> : <span className={styles["no-description"]}>What's your idea?</span>}
-                        </p>
-                        <small className={styles["char-count"]}>{description.length} / 140</small>
-                    </>
-                ) : (
-                    <>
-                        <textarea
-                            autoFocus={editing.description}
-                            ref={descriptionInputRef}
-                            className={clsx(styles["text-input"], "p-1!")}
-                            placeholder="What's your idea?"
-                            value={newIdeaDescription}
-                            onKeyDown={handleKeyDown}
-                            onChange={handleDescriptionChange}
-                            onBlur={handleBlur}
-                        />
-                        <small
-                            className={clsx(styles["char-count"], {
-                                [styles.warning]: newIdeaDescription?.length > 120,
-                                [styles.danger]: newIdeaDescription?.length > 130,
-                                [styles.max]: maxCountExceeded,
-                            })}
-                        >
-                            {newIdeaDescription.length} / 140
-                        </small>
-                    </>
-                )}
-            </div>
-            <div className={styles.footer}>
+            <footer className={styles.footer}>
                 <small className={styles.metadata}>{createdAtString ? `Created ${createdAtString}` : <br />}</small>
                 <small className={styles.metadata}>{lastModifiedString ? `Modified ${lastModifiedString}` : <br />}</small>
-            </div>
-        </div>
+            </footer>
+        </article>
     );
 }

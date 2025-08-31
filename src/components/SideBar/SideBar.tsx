@@ -1,45 +1,40 @@
 import Button from "@/components/Button/Button";
 import { MdAdd } from "react-icons/md";
-import Menu from "@/components/Menu/Menu";
-import type { SideBarProps } from "./types";
 import clsx from "clsx";
+import { useState } from "react";
+import type { Collection } from "@/api/collections";
+import CollectionList from "../CollectionList/CollectionList";
 
-export default function SideBar({
-    menuItems,
-    selectedCollection,
-    isAddingCollection,
-    isSubmittingCollection,
-    isOpen,
-    onSelectCollection,
-    onCreateCollection,
-    onEditCollection,
-    onDeleteCollection,
-    onClickAddCollection,
-    onCloseSideBar,
-}: SideBarProps) {
+export interface SideBarProps {
+    isSideBarOpen: boolean;
+    selectedCollection: Collection | null;
+    setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setSelectedCollection: React.Dispatch<React.SetStateAction<Collection | null>>;
+}
+
+export default function SideBar({ isSideBarOpen, selectedCollection, setIsSideBarOpen, setSelectedCollection }: SideBarProps) {
+    const [isAddingCollection, setIsAddingCollection] = useState(false);
+    const [isSubmittingCollection, setIsSubmittingCollection] = useState(false);
+
     return (
         <>
-            <div
+            <aside
                 className={clsx(
                     "h-full flex flex-col justify-between sm:gap-3 sm:w-[400px] max-sm:fixed max-sm:bg-inherit max-sm:z-40 max-sm:overflow-hidden max-sm:transition-all max-sm:-translate-x-full max-sm:w-2/3 max-sm:p-3",
-                    { "max-sm:translate-x-0": isOpen }
+                    { "max-sm:translate-x-0": isSideBarOpen }
                 )}
             >
-                <div className="max-h-full overflow-y-auto p-1">
-                    <Menu
-                        items={menuItems}
-                        selectedItem={selectedCollection ? selectedCollection.id : "all"}
-                        isAdding={isAddingCollection}
-                        onCreate={onCreateCollection}
-                        onSelect={(item) => onSelectCollection(item.value)}
-                        onEdit={(item, name) => onEditCollection(name, item.value)}
-                        onDelete={({ value }) => onDeleteCollection(value)}
-                    />
-                </div>
+                <CollectionList
+                    selectedCollection={selectedCollection}
+                    isAddingCollection={isAddingCollection}
+                    setSelectedCollection={setSelectedCollection}
+                    setIsSubmittingCollection={setIsSubmittingCollection}
+                    setIsAddingCollection={setIsAddingCollection}
+                />
                 <div className="flex flex-col gap-2">
                     <hr className="border-stone-700" />
                     <Button
-                        onClick={onClickAddCollection}
+                        onClick={() => setIsAddingCollection(true)}
                         text="Add Collection"
                         Icon={MdAdd}
                         variant="plain"
@@ -48,8 +43,11 @@ export default function SideBar({
                         disabled={isSubmittingCollection || isAddingCollection}
                     />
                 </div>
-            </div>
-            {isOpen && <div className="sm:hidden fixed w-full h-full bg-black/70 z-39" onClick={onCloseSideBar}></div>}
+            </aside>
+            {/* Overlay background behind the sidebar; clicking it will close the sidebar */}
+            {isSideBarOpen && (
+                <div className="sm:hidden fixed w-full h-full bg-black/70 z-39" onClick={() => setIsSideBarOpen(false)}></div>
+            )}
         </>
     );
 }

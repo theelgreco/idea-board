@@ -56,7 +56,8 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
             />
             <div className={clsx(styles["popup-menu"], { [styles.open]: isOpen })}>
                 {items.map((el) => (
-                    <div
+                    <Button
+                        variant="plain"
                         key={el.value}
                         className={clsx(styles["popup-menu-item"], { [styles.selected]: el.value === selectedItem?.value })}
                         onClick={() => {
@@ -65,7 +66,7 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
                         }}
                     >
                         {el.label}
-                    </div>
+                    </Button>
                 ))}
             </div>
         </div>

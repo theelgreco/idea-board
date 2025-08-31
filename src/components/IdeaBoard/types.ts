@@ -1,13 +1,13 @@
 import type { Collection } from "@/api/collections";
-import type { PopupMenuItem } from "../PopupMenu/types";
+import type { PopupCollection } from "../PopupMenu/types";
 
 export interface IdeaBoardProps {
     selectedCollection: Collection | null;
-    onOpenSideBar: () => void;
+    setIsSideBarOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export type OrderChoices = "asc" | "desc";
 
 export type SortByOptions = "createdAt" | "name";
 
-export type SortByMenuItem = PopupMenuItem<string, SortByOptions>;
+export type SortByCollection = PopupCollection<string, SortByOptions>;
