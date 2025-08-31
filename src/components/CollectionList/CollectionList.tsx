@@ -118,7 +118,7 @@ export default function CollectionList({
                             />
                         );
                     })}
-                {/* New Collection */}
+                {/* New (blank) collection */}
                 {isAddingCollection && <Collection isNew={true} onCreate={(name) => handleOnCreate(name)} />}
             </div>
         </div>
