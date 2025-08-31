@@ -17,7 +17,7 @@ function App() {
 
     return (
         <>
-            <main className="flex w-full h-full sm:p-5! gap-5 bg-primary-background-color">
+            <div className="flex w-full h-full sm:p-5! gap-5 bg-primary-background-color">
                 <SideBar
                     isSideBarOpen={isSideBarOpen}
                     setIsSideBarOpen={() => setIsSideBarOpen(false)}
@@ -25,7 +25,7 @@ function App() {
                     setSelectedCollection={setSelectedCollection}
                 />
                 <IdeaBoard selectedCollection={selectedCollection} setIsSideBarOpen={setIsSideBarOpen} />
-            </main>
+            </div>
             <Toaster position="top-right" richColors />
         </>
     );

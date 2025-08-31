@@ -89,7 +89,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
     }, [order, selectedCollection, selectedSortByOption]);
 
     return (
-        <section className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
+        <main className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
             <div className="w-full flex justify-between px-5 py-3 sm:px-8 sm:py-5 bg-[#222222]">
                 <div className="flex items-center gap-5 max-w-full overflow-hidden">
                     <Button
@@ -165,6 +165,6 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                         ))}
                 </div>
             </div>
-        </section>
+        </main>
     );
 }
