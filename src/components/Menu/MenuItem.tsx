@@ -5,7 +5,15 @@ import styles from "./MenuItem.module.css";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Button from "../Button/Button";
 
-export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, onDelete = () => {}, ...rest }: MenuItemProps) {
+export default function MenuItem({
+    item,
+    selected,
+    isNew,
+    onCreate = () => {},
+    onEdit = () => {},
+    onDelete = () => {},
+    ...rest
+}: MenuItemProps) {
     const [isEditing, setIsEditing] = useState(false);
     const [inputValue, setInputValue] = useState(item?.label || "");
     const [isHovered, setIsHovered] = useState(false);
@@ -25,15 +33,15 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
 
     function handleBlur() {
         // New item
-        if (isAdding) {
-            onCreate?.(inputValue);
+        if (isNew) {
+            onCreate(inputValue);
         }
 
         // Existing item
         if (item) {
             // Has changed
             if (inputValue && inputValue !== item.label) {
-                onEdit?.(item, inputValue);
+                onEdit(inputValue);
             } else {
                 setInputValue(item.label);
             }
@@ -43,10 +51,10 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
     }
 
     useEffect(() => {
-        if (isAdding) {
+        if (isNew) {
             setIsEditing(true);
         }
-    }, [isAdding]);
+    }, [isNew]);
 
     return (
         <Button
@@ -62,7 +70,7 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
             {...rest}
             type="button"
         >
-            {isEditing && (item?.editable || isAdding) ? (
+            {isEditing && (item?.editable || isNew) ? (
                 <input
                     ref={inputRef}
                     type="text"
@@ -94,11 +102,11 @@ export default function MenuItem({ item, selected, isAdding, onCreate, onEdit, o
                                 className="hover:bg-stone-700/50"
                                 onClick={(e) => {
                                     e.stopPropagation();
-                                    onDelete(item);
+                                    onDelete();
                                 }}
                                 onKeyDown={(e) => {
                                     if (e.key === "Enter") {
-                                        onDelete(item);
+                                        onDelete();
                                     }
                                 }}
                             />

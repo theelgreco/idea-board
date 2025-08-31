@@ -8,7 +8,7 @@ import throttle from "@/utils/throttle";
 import { IoMdTrash } from "react-icons/io";
 import Button from "../Button/Button";
 
-export default function IdeaCard({ idea, isNew, onSave, onDelete }: IdeaCardProps) {
+export default function IdeaCard({ idea, isNew, onSave, onDelete = () => {} }: IdeaCardProps) {
     const [newIdeaName, setNewIdeaName] = useState(idea?.name || "");
     const [newIdeaDescription, setNewIdeaDescription] = useState(idea?.description || "");
     const [maxCountExceeded, setMaxCountExceeded] = useState(false);

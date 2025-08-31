@@ -112,7 +112,6 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                             createIdea(newIdea);
                             setIsAdding(false);
                         }}
-                        onDelete={() => {}}
                     />
                 )}
                 {ideas &&

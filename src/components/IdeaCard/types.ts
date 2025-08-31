@@ -9,5 +9,5 @@ export interface IdeaCardProps extends React.AllHTMLAttributes<HTMLDivElement> {
     idea?: Idea;
     isNew?: boolean;
     onSave: (data: IdeaCardSaveArgs) => void;
-    onDelete: () => void;
+    onDelete?: () => void;
 }
