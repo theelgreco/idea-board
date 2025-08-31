@@ -1,9 +1,7 @@
 import { useEffect, useState } from "react";
 import IdeaCard from "../IdeaCard/IdeaCard";
 import Button from "../Button/Button";
-import { MdAddCircle, MdArrowDownward, MdArrowUpward, MdCreate, MdMenu } from "react-icons/md";
-import { IoMdFunnel } from "react-icons/io";
-import PopupMenu from "../PopupMenu/PopupMenu";
+import { MdAddCircle, MdCreate, MdMenu } from "react-icons/md";
 import {
     deleteIdea,
     getIdeas,
@@ -16,6 +14,7 @@ import {
 } from "@/api/ideas";
 import type { IdeaBoardProps, OrderChoices, SortByMenuItem } from "./types";
 import type { IdeaCardSaveArgs } from "../IdeaCard/types";
+import SortControls from "../SortControls/SortControls";
 
 const sortByOptions: SortByMenuItem[] = [
     { label: "Created At", value: "createdAt" },
@@ -27,14 +26,6 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
     const [isAdding, setIsAdding] = useState(false);
     const [order, setOrder] = useState<OrderChoices>("desc");
     const [selectedSortByOption, setSelectedSortByOption] = useState<SortByMenuItem>(sortByOptions[0]);
-
-    function handleSortSelection(value: string) {
-        const selection = sortByOptions.find((el) => el.value === value);
-
-        if (selection) {
-            setSelectedSortByOption(selection);
-        }
-    }
 
     async function createIdea(data: IdeaCardSaveArgs) {
         if (data.name) {
@@ -103,67 +94,54 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                         {selectedCollection?.name || "All Ideas"}
                     </h1>
                 </div>
-                {/* TO-DO: Make into component SortControls */}
-                <div className="flex items-center gap-1.5 text-nowrap">
-                    <PopupMenu
-                        items={sortByOptions}
-                        selectedItem={selectedSortByOption}
-                        Icon={IoMdFunnel}
-                        onSelection={handleSortSelection}
-                    />
-                    {/* Divider */}
-                    <div className="h-full w-[1px] border-l border-l-stone-600"></div>
-                    <Button
-                        Icon={order === "asc" ? MdArrowUpward : MdArrowDownward}
-                        text=""
-                        variant="plain"
-                        className="p-2!"
-                        onClick={() => (order === "asc" ? setOrder("desc") : setOrder("asc"))}
-                    />
-                </div>
+                <SortControls
+                    order={order}
+                    setOrder={setOrder}
+                    sortByOptions={sortByOptions}
+                    selectedSortByOption={selectedSortByOption}
+                    setSelectedSortByOption={setSelectedSortByOption}
+                />
             </div>
-            <div className="px-8! py-5! flex-grow overflow-auto">
-                <div className="flex gap-10 flex-wrap">
-                    {!isAdding && (
-                        <>
-                            {/* "New Idea" Button - Widescreen */}
-                            <Button
-                                variant="plain"
-                                className="flex flex-col justify-center w-[var(--idea-card-size)] aspect-square text-stone-500 text-xl! border border-dashed focus:outline outline-white max-sm:hidden!"
-                                onClick={() => setIsAdding(true)}
-                                Icon={MdAddCircle}
-                                iconProps={{ size: 80, className: "text-stone-600" }}
-                                text="New Idea"
-                            />
-                            {/* "New Idea" Button - Mobile */}
-                            <Button
-                                Icon={MdCreate}
-                                variant="primary"
-                                className="fixed bottom-[20px] right-[20px] rounded-full aspect-square sm:hidden!"
-                                onClick={() => setIsAdding(true)}
-                            />
-                        </>
-                    )}
-                    {isAdding && (
-                        <IdeaCard
-                            isNew={true}
-                            onSave={(newIdea) => {
-                                createIdea(newIdea);
-                                setIsAdding(false);
-                            }}
-                            onDelete={() => {}}
+            <div className="flex gap-10 flex-wrap px-8! py-5! flex-grow overflow-auto">
+                {!isAdding && (
+                    <>
+                        {/* "New Idea" Button - Widescreen */}
+                        <Button
+                            variant="plain"
+                            className="flex flex-col justify-center w-[var(--idea-card-size)] aspect-square text-stone-500 text-xl! border border-dashed focus:outline outline-white max-sm:hidden!"
+                            onClick={() => setIsAdding(true)}
+                            Icon={MdAddCircle}
+                            iconProps={{ size: 80, className: "text-stone-600" }}
+                            text="New Idea"
                         />
-                    )}
-                    {ideas &&
-                        ideas.map((idea) => (
-                            <IdeaCard
-                                key={idea.id}
-                                idea={idea}
-                                onSave={(data) => editIdea(data, { id: idea.id })}
-                                onDelete={() => removeIdea({ id: idea.id })}
-                            />
-                        ))}
-                </div>
+                        {/* "New Idea" Button - Mobile */}
+                        <Button
+                            Icon={MdCreate}
+                            variant="primary"
+                            className="fixed bottom-[20px] right-[20px] rounded-full aspect-square sm:hidden!"
+                            onClick={() => setIsAdding(true)}
+                        />
+                    </>
+                )}
+                {isAdding && (
+                    <IdeaCard
+                        isNew={true}
+                        onSave={(newIdea) => {
+                            createIdea(newIdea);
+                            setIsAdding(false);
+                        }}
+                        onDelete={() => {}}
+                    />
+                )}
+                {ideas &&
+                    ideas.map((idea) => (
+                        <IdeaCard
+                            key={idea.id}
+                            idea={idea}
+                            onSave={(data) => editIdea(data, { id: idea.id })}
+                            onDelete={() => removeIdea({ id: idea.id })}
+                        />
+                    ))}
             </div>
         </main>
     );
