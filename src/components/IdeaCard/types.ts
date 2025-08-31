@@ -1,13 +1,13 @@
-import type { IdeaPostData, IdeaPutData } from "@/api/ideas";
+import type { Idea } from "@/api/ideas";
+
+export interface IdeaCardSaveArgs {
+    name?: string;
+    description?: string;
+}
 
 export interface IdeaCardProps extends React.AllHTMLAttributes<HTMLDivElement> {
-    name: string;
-    description: string;
-    createdAt?: string;
-    lastModified?: string;
-    isAdding?: boolean;
-    onCreate?: (data: IdeaPostData) => void;
-    onSave?: (data: IdeaPutData) => void;
-    onDelete?: () => void;
-    onCancel?: () => void;
+    idea?: Idea;
+    isNew?: boolean;
+    onSave: (data: IdeaCardSaveArgs) => void;
+    onDelete: () => void;
 }

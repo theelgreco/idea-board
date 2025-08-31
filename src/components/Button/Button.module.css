@@ -16,6 +16,10 @@
     outline-width: 0;
 }
 
+.button:focus {
+    outline: 1px solid white;
+}
+
 .button:disabled {
     opacity: 0.5;
     cursor: not-allowed;

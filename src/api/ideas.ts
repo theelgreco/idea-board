@@ -18,7 +18,7 @@ export interface IdeasGetParams {
     collection?: string | null;
 }
 
-export type IdeaPostData = Pick<Idea, "name" | "description" | "collection">;
+export type IdeaPostData = { name: string; description?: string; collection?: string };
 
 export type IdeaPutData = Partial<Pick<Idea, "name" | "description" | "collection">>;
 
@@ -60,7 +60,7 @@ export async function postIdea(data: IdeaPostData): Promise<MockHttpResponse<Ide
 
     const currentDateTime = new Date().toISOString();
 
-    const newIdea: Idea = { createdAt: currentDateTime, lastModified: currentDateTime, id: crypto.randomUUID(), ...data };
+    const newIdea: Idea = { createdAt: currentDateTime, lastModified: currentDateTime, id: crypto.randomUUID(), description: "", ...data };
 
     const ideas = JSON.parse(localStorageGetOrCreate("ideas", JSON.stringify([]))) as Idea[];
 
