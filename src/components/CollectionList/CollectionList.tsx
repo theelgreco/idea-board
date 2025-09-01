@@ -1,8 +1,8 @@
 import { deleteCollection, getCollections, patchCollection, postCollection, type Collection as CollectionType } from "@/api/collections";
-import { UniqueConstraintError } from "@/utils/errors";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Collection from "../Collection/Collection";
+import { getErrorMessage } from "@/utils/errors";
 
 interface CollectionListProps {
     selectedCollection: CollectionType | null;
@@ -27,9 +27,7 @@ export default function CollectionList({
             setCollections(collections ? [...collections, response.data] : [response.data]);
             setSelectedCollection(response.data);
         } catch (err: unknown) {
-            if (err instanceof UniqueConstraintError) {
-                toast.error(err.message);
-            }
+            toast.error(getErrorMessage(err));
             console.error(err);
         }
     }

@@ -1,24 +1,25 @@
-interface FieldErrorOptions {
-    fields: string[];
+export type ErrorWithMessage = {
+    message: string;
+};
+
+export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
+    return (
+        typeof error === "object" && error !== null && "message" in error && typeof (error as Record<string, unknown>).message === "string"
+    );
 }
 
-export class FieldError extends Error {
-    fields: string[];
+export function toErrorWithMessage(maybeError: unknown): ErrorWithMessage {
+    if (isErrorWithMessage(maybeError)) return maybeError;
 
-    constructor(message: string, options: FieldErrorOptions) {
-        super(message);
-        this.fields = options.fields;
+    try {
+        return new Error(JSON.stringify(maybeError));
+    } catch {
+        // fallback in case there's an error stringifying the maybeError
+        // like with circular references for example.
+        return new Error(String(maybeError));
     }
 }
 
-export class FieldRequiredError extends FieldError {
-    constructor(options: FieldErrorOptions) {
-        super("This field is required", options);
-    }
-}
-
-export class UniqueConstraintError extends FieldError {
-    constructor(options: FieldErrorOptions) {
-        super("This value is already taken", options);
-    }
+export function getErrorMessage(error: unknown) {
+    return toErrorWithMessage(error).message;
 }

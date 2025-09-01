@@ -2,7 +2,7 @@ import { MOCK_API_DELAY_AMOUNT } from "@/utils/constants";
 import delay from "../utils/delay";
 import { localStorageGetOrCreate } from "../utils/storage";
 import { HttpStatusCode, type MockHttpResponse } from "./types/http";
-import { FieldRequiredError, UniqueConstraintError } from "@/utils/errors";
+import { FieldRequiredError, UniqueConstraintError } from "@/api/types/errors";
 
 export interface Collection {
     id: string;

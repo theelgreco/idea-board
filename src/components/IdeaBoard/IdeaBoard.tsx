@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import IdeaCard from "../IdeaCard/IdeaCard";
 import Button from "../Button/Button";
 import { MdMenu } from "react-icons/md";
@@ -61,24 +61,24 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
         }
     }
 
-    useEffect(() => {
-        async function fetchIdeas() {
-            const params = {
-                order,
-                collection: selectedCollection?.id,
-                sortBy: selectedSortByOption.value,
-            };
+    const fetchIdeas = useCallback(async () => {
+        const params = {
+            order,
+            collection: selectedCollection?.id,
+            sortBy: selectedSortByOption.value,
+        };
 
-            try {
-                const response = await getIdeas(params);
-                setIdeas(response.data);
-            } catch (err: unknown) {
-                console.error(err);
-            }
+        try {
+            const response = await getIdeas(params);
+            setIdeas(response.data);
+        } catch (err: unknown) {
+            console.error(err);
         }
-
-        fetchIdeas();
     }, [order, selectedCollection, selectedSortByOption]);
+
+    useEffect(() => {
+        fetchIdeas();
+    }, [fetchIdeas]);
 
     return (
         <main className="relative flex flex-col w-full h-full overflow-hidden sm:rounded-2xl sm:bg-secondary-background-color after:absolute after:w-full after:h-full sm:after:inset-shadow-[0_0_8px_2px_rgba(0,0,0,0.75)] after:rounded-2xl after:pointer-events-none">
