@@ -28,6 +28,21 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
     const [order, setOrder] = useState<OrderChoices>("desc");
     const [selectedSortByOption, setSelectedSortByOption] = useState<SortByCollection>(sortByOptions[0]);
 
+    const fetchIdeas = useCallback(async () => {
+        const params = {
+            order,
+            collection: selectedCollection?.id,
+            sortBy: selectedSortByOption.value,
+        };
+
+        try {
+            const response = await getIdeas(params);
+            setIdeas(response.data);
+        } catch (err: unknown) {
+            console.error(err);
+        }
+    }, [order, selectedCollection, selectedSortByOption]);
+
     async function createIdea(data: IdeaCardSaveArgs) {
         if (data.name) {
             try {
@@ -60,21 +75,6 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
             console.error(err);
         }
     }
-
-    const fetchIdeas = useCallback(async () => {
-        const params = {
-            order,
-            collection: selectedCollection?.id,
-            sortBy: selectedSortByOption.value,
-        };
-
-        try {
-            const response = await getIdeas(params);
-            setIdeas(response.data);
-        } catch (err: unknown) {
-            console.error(err);
-        }
-    }, [order, selectedCollection, selectedSortByOption]);
 
     useEffect(() => {
         fetchIdeas();
