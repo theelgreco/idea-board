@@ -13,7 +13,7 @@ import {
     type IdeaPutParams,
 } from "@/api/ideas";
 import type { IdeaBoardProps, OrderChoices, SortByCollection } from "./types";
-import type { IdeaCardSaveArgs } from "../IdeaCard/types";
+import type { IdeaCardSaveArgs } from "../IdeaCard/IdeaCard";
 import SortControls from "../SortControls/SortControls";
 import NewIdeaButton from "../NewIdeaButton/NewIdeaButton";
 
@@ -27,6 +27,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
     const [isAdding, setIsAdding] = useState(false);
     const [order, setOrder] = useState<OrderChoices>("desc");
     const [selectedSortByOption, setSelectedSortByOption] = useState<SortByCollection>(sortByOptions[0]);
+    const [lastAddedIdeaId, setLastAddedIdeaId] = useState<string | null>(null);
 
     const fetchIdeas = useCallback(async () => {
         const params = {
@@ -49,6 +50,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                 const response = await postIdea({ name: data.name, collection: selectedCollection?.id });
                 setIdeas((prev) => [response.data, ...(prev || [])]);
                 setIsAdding(false);
+                setLastAddedIdeaId(response.data.id);
             } catch (err: unknown) {
                 console.error(err);
             }
@@ -119,6 +121,7 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
                         <IdeaCard
                             key={idea.id}
                             idea={idea}
+                            autoFocusDescription={idea.id === lastAddedIdeaId}
                             onSave={(data) => editIdea(data, { id: idea.id })}
                             onDelete={() => removeIdea({ id: idea.id })}
                         />

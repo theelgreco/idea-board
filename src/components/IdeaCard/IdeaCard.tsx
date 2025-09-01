@@ -1,14 +1,27 @@
-import type { IdeaCardProps, IdeaCardSaveArgs } from "./types";
 import styles from "./IdeaCard.module.css";
 import { formatRelative } from "date-fns";
-import { useMemo, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { DESCRIPTION_MAX_CHAR_COUNT } from "@/utils/constants";
 import clsx from "clsx";
 import throttle from "@/utils/throttle";
 import { IoMdTrash } from "react-icons/io";
 import Button from "../Button/Button";
+import type { Idea } from "@/api/ideas";
 
-export default function IdeaCard({ idea, isNew, onSave, onDelete = () => {} }: IdeaCardProps) {
+export interface IdeaCardSaveArgs {
+    name?: string;
+    description?: string;
+}
+
+export interface IdeaCardProps extends React.AllHTMLAttributes<HTMLDivElement> {
+    idea?: Idea;
+    isNew?: boolean;
+    autoFocusDescription?: boolean;
+    onSave: (data: IdeaCardSaveArgs) => void;
+    onDelete?: () => void;
+}
+
+export default function IdeaCard({ idea, isNew, autoFocusDescription, onSave, onDelete = () => {} }: IdeaCardProps) {
     const [newIdeaName, setNewIdeaName] = useState(idea?.name || "");
     const [newIdeaDescription, setNewIdeaDescription] = useState(idea?.description || "");
     const [maxCountExceeded, setMaxCountExceeded] = useState(false);
@@ -19,11 +32,9 @@ export default function IdeaCard({ idea, isNew, onSave, onDelete = () => {} }: I
     const createdAtString = idea?.createdAt ? formatRelative(new Date(idea.createdAt), new Date()) : null;
     const lastModifiedString = idea?.lastModified ? formatRelative(new Date(idea.lastModified), new Date()) : null;
 
-    const throttledSetMaxCountExceeded = useMemo(() => {
-        return throttle(() => {
-            setMaxCountExceeded((previousValue) => !previousValue);
-        }, 200);
-    }, []);
+    const throttledSetMaxCountExceeded = throttle(() => {
+        setMaxCountExceeded((previousValue) => !previousValue);
+    }, 200);
 
     function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const isValidKeyCombination = e.key === "Enter" || e.key === "Escape" || (e.shiftKey && e.key === "Enter");
@@ -87,6 +98,7 @@ export default function IdeaCard({ idea, isNew, onSave, onDelete = () => {} }: I
                     className={clsx(styles["text-input"], "p-1!")}
                     placeholder="What's your idea?"
                     value={newIdeaDescription}
+                    autoFocus={autoFocusDescription}
                     onKeyDown={handleKeyDown}
                     onChange={handleDescriptionChange}
                     onBlur={handleSave}
