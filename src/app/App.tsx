@@ -1,4 +1,3 @@
-import "./App.css";
 import IdeaBoard from "@/components/IdeaBoard/IdeaBoard";
 import SideBar from "../components/SideBar/SideBar";
 import { useEffect, useState } from "react";
