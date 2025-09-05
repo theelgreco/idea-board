@@ -31,8 +31,6 @@ async function createDefaultIdeas(page: Page) {
 test.describe("Idea Board E2E", () => {
     test.beforeEach(async ({ page }) => {
         await page.goto("/");
-        // Clear localStorage or reset state if needed
-        await page.evaluate(() => localStorage.clear());
     });
 
     test("should add, edit, persist, and delete ideas", async ({ page }) => {
@@ -43,24 +41,23 @@ test.describe("Idea Board E2E", () => {
         await expect(newIdeaButton).toBeHidden();
 
         // Add name
+        await expect(page.getByRole("textbox", { name: "Enter idea name" })).toBeFocused();
         await page.getByRole("textbox", { name: "Enter idea name" }).fill("hello");
         await page.getByRole("textbox", { name: "Enter idea name" }).press("Enter");
         await expect(page.getByRole("textbox", { name: "Enter idea name" })).toHaveValue("hello");
 
         // Add description
-        await page.getByRole("textbox", { name: "What's your idea?" }).click();
+        await expect(page.getByRole("textbox", { name: "What's your idea?" })).toBeFocused();
         await page.getByRole("textbox", { name: "What's your idea?" }).fill("world");
         await page.getByRole("textbox", { name: "What's your idea?" }).press("Shift+Enter");
         await expect(page.getByRole("textbox", { name: "What's your idea?" })).toHaveValue("world");
 
         // Edit name
-        await page.getByRole("textbox", { name: "Enter idea name" }).click();
         await page.getByRole("textbox", { name: "Enter idea name" }).fill("hellojwfnjff");
         await page.getByRole("textbox", { name: "Enter idea name" }).press("Enter");
         await expect(page.getByRole("textbox", { name: "Enter idea name" })).toHaveValue("hellojwfnjff");
 
         // Edit description
-        await page.getByRole("textbox", { name: "What's your idea?" }).click();
         await page.getByRole("textbox", { name: "What's your idea?" }).fill("worldjwdfnjj");
         await page.getByRole("textbox", { name: "What's your idea?" }).press("Shift+Enter");
         await expect(page.getByRole("textbox", { name: "What's your idea?" })).toHaveValue("worldjwdfnjj");
@@ -70,11 +67,14 @@ test.describe("Idea Board E2E", () => {
         await expect(page.getByRole("textbox", { name: "Enter idea name" })).toHaveValue("hellojwfnjff");
         await expect(page.getByRole("textbox", { name: "What's your idea?" })).toHaveValue("worldjwdfnjj");
 
+        // Should have 1 idea
         await expect(page.getByRole("article")).toHaveCount(1);
         await checkNumberOfIdeasInLocalStorage(page, 1);
 
         // Delete idea
         await page.getByRole("article").locator("header").getByRole("button").click();
+
+        // Should have no ideas
         await expect(page.getByRole("article")).toHaveCount(0);
         await checkNumberOfIdeasInLocalStorage(page, 0);
     });
