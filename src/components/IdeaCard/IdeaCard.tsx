@@ -39,7 +39,7 @@ export default function IdeaCard({ idea, isNew, autoFocusDescription, onSave, on
     function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) {
         const isValidKeyCombination =
             (e.currentTarget.tagName === "INPUT" && e.key === "Enter") ||
-            (e.currentTarget.tagName === "TEXTAREA" && e.shiftKey && e.key === "Enter") ||
+            (e.currentTarget.tagName === "TEXTAREA" && (e.shiftKey || e.metaKey) && e.key === "Enter") ||
             e.key === "Escape";
 
         if (isValidKeyCombination) {
