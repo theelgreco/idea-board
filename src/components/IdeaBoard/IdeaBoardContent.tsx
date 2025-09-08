@@ -25,15 +25,7 @@ export default function IdeaBoardContent({
         <div className="flex gap-10 flex-wrap px-8! py-5! overflow-auto">
             {!isAdding && <NewIdeaButton onClick={() => setIsAdding(true)} />}
             {/* Blank IdeaCard for adding a new idea */}
-            {isAdding && (
-                <IdeaCard
-                    isNew={true}
-                    onSave={(newIdea) => {
-                        createIdea(newIdea);
-                        setIsAdding(false);
-                    }}
-                />
-            )}
+            {isAdding && <IdeaCard isNew={true} onSave={(newIdea) => createIdea(newIdea)} />}
             {ideas &&
                 ideas.map((idea) => (
                     <IdeaCard

@@ -52,10 +52,11 @@ export default function IdeaBoard({ selectedCollection, setIsSideBarOpen }: Idea
             try {
                 const response = await postIdea({ name: data.name, collection: selectedCollection?.id });
                 setIdeas((prev) => [response.data, ...(prev || [])]);
-                setIsAdding(false);
                 setLastAddedIdeaId(response.data.id);
             } catch (err: unknown) {
                 console.error(err);
+            } finally {
+                setIsAdding(false);
             }
         }
     }
