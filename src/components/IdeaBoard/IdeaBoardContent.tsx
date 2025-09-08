@@ -38,7 +38,7 @@ export default function IdeaBoardContent({
                     <IdeaCard
                         key={idea.id}
                         idea={idea}
-                        autoFocusDescription={idea.id === lastAddedIdeaId}
+                        autoFocusDescription={idea.id === lastAddedIdeaId} // Autofocuses the description on a newly added idea
                         onSave={(data) => editIdea(data, { id: idea.id })}
                         onDelete={() => removeIdea({ id: idea.id })}
                     />
