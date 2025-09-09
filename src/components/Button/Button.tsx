@@ -1,6 +1,14 @@
 import clsx from "clsx";
-import type { ButtonProps } from "./types";
 import styles from "./Button.module.css";
+import type { IconBaseProps, IconType } from "react-icons";
+
+interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+    text?: string;
+    Icon?: IconType;
+    iconProps?: IconBaseProps;
+    iconPosition?: "left" | "right";
+    variant: "primary" | "secondary" | "plain";
+}
 
 export default function Button({ Icon, iconProps, text, iconPosition, variant, children, ...rest }: ButtonProps) {
     return (
