@@ -1,8 +1,7 @@
 import { IoMdFunnel } from "react-icons/io";
 import Button from "../Button/Button";
-import PopupMenu from "../PopupMenu/PopupMenu";
+import PopupMenu, { type PopupCollection } from "../PopupMenu/PopupMenu";
 import { MdArrowDownward, MdArrowUpward } from "react-icons/md";
-import type { PopupCollection } from "../PopupMenu/types";
 
 export type OrderChoices = "asc" | "desc";
 

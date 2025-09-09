@@ -2,7 +2,21 @@ import clsx from "clsx";
 import styles from "./PopupMenu.module.css";
 import { useEffect, useState } from "react";
 import Button from "../Button/Button";
-import type { PopupMenuProps } from "./types";
+import type { IconBaseProps, IconType } from "react-icons";
+
+export interface PopupCollection<L = string, V = string> {
+    label: L;
+    value: V;
+}
+
+export interface PopupMenuProps extends React.AllHTMLAttributes<HTMLDivElement> {
+    items: PopupCollection[];
+    selectedItem: PopupCollection;
+    Icon?: IconType;
+    iconProps?: IconBaseProps;
+    iconPosition?: "left" | "right";
+    onSelection: (value: string) => void;
+}
 
 export default function PopupMenu({ items, selectedItem, Icon, iconPosition, iconProps, onSelection, ...rest }: PopupMenuProps) {
     const [isOpen, setIsOpen] = useState(false);
