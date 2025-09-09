@@ -1,7 +1,18 @@
 import styles from "./Dropdown.module.css";
 import buttonStyles from "@/components/Button/Button.module.css";
 import clsx from "clsx";
-import type { DropdownProps } from "./types";
+
+interface Collection<L = string, V = string> {
+    label: L;
+    value: V;
+}
+
+interface DropdownProps extends React.SelectHTMLAttributes<HTMLSelectElement> {
+    id: string;
+    items: Collection[];
+    selectedItem: Collection;
+    handleSelect: (value: string) => void;
+}
 
 export default function Dropdown({ id, items, selectedItem, handleSelect, ...rest }: DropdownProps) {
     return (
