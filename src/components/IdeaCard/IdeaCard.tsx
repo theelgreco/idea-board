@@ -64,10 +64,7 @@ export default function IdeaCard({ idea, isNew, autoFocusDescription, onSave, on
             postData.description = newIdeaDescription;
         }
 
-        // Only save if there is something to save
-        if (postData.name || postData.description) {
-            onSave(postData);
-        }
+        onSave(postData);
     }
 
     function handleDescriptionChange(e: React.ChangeEvent<HTMLTextAreaElement>) {
