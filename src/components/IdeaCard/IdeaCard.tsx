@@ -1,9 +1,9 @@
 import styles from "./IdeaCard.module.css";
 import { formatRelative } from "date-fns";
 import { useRef, useState } from "react";
-import { DESCRIPTION_MAX_CHAR_COUNT } from "@/utils/constants";
+import { DESCRIPTION_MAX_CHAR_COUNT } from "@/lib/constants";
 import clsx from "clsx";
-import throttle from "@/utils/throttle";
+import throttle from "@/lib/throttle";
 import { IoMdTrash } from "react-icons/io";
 import Button from "../Button/Button";
 import type { Idea } from "@/api/ideas";

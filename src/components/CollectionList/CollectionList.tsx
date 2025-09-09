@@ -2,7 +2,7 @@ import { deleteCollection, getCollections, patchCollection, postCollection, type
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import Collection from "../Collection/Collection";
-import { getErrorMessage } from "@/utils/errors";
+import { getErrorMessage } from "@/lib/errors";
 
 interface CollectionListProps {
     selectedCollection: CollectionType | null;

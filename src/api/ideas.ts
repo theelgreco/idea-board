@@ -1,6 +1,6 @@
-import { MOCK_API_DELAY_AMOUNT } from "@/utils/constants";
-import delay from "@/utils/delay";
-import { localStorageGetOrCreate } from "@/utils/storage";
+import { MOCK_API_DELAY_AMOUNT } from "@/lib/constants";
+import delay from "@/lib/delay";
+import { localStorageGetOrCreate } from "@/lib/storage";
 import { HttpStatusCode, type MockHttpResponse } from "./types/http";
 
 export interface Idea {
