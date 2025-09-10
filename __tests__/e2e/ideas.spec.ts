@@ -1,31 +1,9 @@
 import { test, expect, Page } from "@playwright/test";
 
-const IDEAS = [
-    { name: "My Great Idea", description: "I've had a great idea!" },
-    { name: "Another Great Idea", description: "I've had another great idea!" },
-    { name: "My Final Great Idea", description: "I've had my final great idea!" },
-];
-
-const NAME_PLACEHOLDER = "Enter idea name";
-const DESCRIPTION_PLACEHOLDER = "What's your idea?";
-
 async function checkNumberOfIdeasInLocalStorage(page: Page, expected: number) {
     return await page.waitForFunction((e) => {
         return JSON.parse(localStorage.ideas).length === e;
     }, expected);
-}
-
-async function createDefaultIdeas(page: Page) {
-    for (const idea of IDEAS) {
-        await page.getByTestId("add-idea-btn").click();
-
-        await page.getByPlaceholder(NAME_PLACEHOLDER).fill(idea.name);
-        await page.getByPlaceholder(NAME_PLACEHOLDER).press("Enter");
-
-        await page.getByRole("paragraph").filter({ hasText: DESCRIPTION_PLACEHOLDER }).click();
-        await page.getByPlaceholder(DESCRIPTION_PLACEHOLDER).fill(idea.description);
-        await page.getByPlaceholder(DESCRIPTION_PLACEHOLDER).press("Shift+Enter");
-    }
 }
 
 test.describe("Idea Board E2E", () => {
