@@ -61,6 +61,7 @@ export default function CollectionList({
             if (err instanceof Error) {
                 toast.error(err.message);
             }
+            throw err;
         }
     }
 
