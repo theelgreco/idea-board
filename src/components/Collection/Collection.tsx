@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MdDelete, MdEdit } from "react-icons/md";
 import Button from "../Button/Button";
 import type { Collection } from "@/api/collections";
@@ -10,7 +10,7 @@ export interface CollectionProps extends React.AllHTMLAttributes<HTMLButtonEleme
     isNew?: boolean;
     isEditable?: boolean;
     onCreate?: (value: string) => void;
-    onEdit?: (value: string) => void;
+    onEdit?: (value: string) => Promise<void>;
     onDelete?: () => void;
 }
 
@@ -20,7 +20,7 @@ export default function Collection({
     isNew,
     isEditable = true,
     onCreate = () => {},
-    onEdit = () => {},
+    onEdit = async () => {},
     onDelete = () => {},
     ...rest
 }: CollectionProps) {
@@ -48,7 +48,9 @@ export default function Collection({
             const hasChanged = inputValue && inputValue !== collection.name;
 
             if (hasChanged) {
-                onEdit(inputValue);
+                onEdit(inputValue).catch(() => {
+                    setInputValue(collection.name);
+                });
             } else {
                 setInputValue(collection.name);
             }
@@ -56,6 +58,10 @@ export default function Collection({
 
         setIsEditing(false);
     }
+
+    useEffect(() => {
+        if (isEditing) inputRef.current?.focus();
+    }, [isEditing]);
 
     return (
         <Button
@@ -70,23 +76,22 @@ export default function Collection({
             {...rest}
             type="button"
         >
-            {isEditing && (isEditable || isNew) ? (
-                <input
-                    ref={inputRef}
-                    type="text"
-                    placeholder="Enter Collection Name"
-                    className={clsx({ "outline-0! w-full": isEditing })}
-                    onBlur={handleBlur}
-                    autoFocus
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyPress}
-                />
-            ) : (
+            {isEditable ? (
                 <>
-                    <span className="w-full text-left">{collection?.name}</span>
+                    <input
+                        ref={inputRef}
+                        type="text"
+                        placeholder="Enter Collection Name"
+                        className={clsx("outline-0! w-full", { "pointer-events-none": !isEditing })}
+                        onBlur={handleBlur}
+                        autoFocus
+                        value={inputValue}
+                        onChange={(e) => setInputValue(e.target.value)}
+                        onKeyDown={handleKeyPress}
+                        disabled={!isEditing}
+                    />
                     {/* Only shows edit/delete buttons when the collection is hovered or currently selected */}
-                    {(isHovered || selected) && isEditable && (
+                    {(isHovered || selected) && !isNew && (
                         <>
                             <MdEdit
                                 role="button"
@@ -116,6 +121,8 @@ export default function Collection({
                         </>
                     )}
                 </>
+            ) : (
+                <span className="w-full text-left">{collection?.name}</span>
             )}
         </Button>
     );
