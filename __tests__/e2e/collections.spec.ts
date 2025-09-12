@@ -24,8 +24,12 @@ test.describe("Collections E2E", () => {
         await checkNumberOfCollectionsInLocalStorage(page, 1);
 
         // Edit collection
-        await page.getByRole("button", { name: "My collection" }).getByRole("button").first().click();
+        await page.getByRole("button", { name: "My collection" }).getByRole("button").nth(0).click();
         await page.getByRole("textbox", { name: "Enter Collection Name" }).fill("My collection edited");
         await expect(page.getByRole("textbox", { name: "Enter Collection Name" })).toHaveValue("My collection edited");
+
+        // Delete collection
+        await page.getByRole("button", { name: "My collection edited" }).getByRole("button").nth(1).click();
+        await checkNumberOfCollectionsInLocalStorage(page, 0);
     });
 });
