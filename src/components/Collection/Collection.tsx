@@ -84,9 +84,10 @@ export default function Collection({
                 />
             ) : (
                 <>
-                    <span>{collection?.name}</span>
+                    <span className="w-full text-left">{collection?.name}</span>
+                    {/* Only shows edit/delete buttons when the collection is hovered or currently selected */}
                     {(isHovered || selected) && isEditable && (
-                        <div className="flex gap-2">
+                        <>
                             <MdEdit
                                 tabIndex={0}
                                 className="hover:bg-stone-700/50 mr-3"
@@ -110,7 +111,7 @@ export default function Collection({
                                     }
                                 }}
                             />
-                        </div>
+                        </>
                     )}
                 </>
             )}
