@@ -20,6 +20,12 @@ test.describe("Collections E2E", () => {
         // Add collection
         page.getByRole("textbox", { name: "Enter Collection Name" }).fill("My collection");
         await page.getByRole("textbox", { name: "Enter Collection Name" }).press("Enter");
+        await expect(page.getByRole("textbox", { name: "Enter Collection Name" })).toHaveValue("My collection");
         await checkNumberOfCollectionsInLocalStorage(page, 1);
+
+        // Edit collection
+        await page.getByRole("button", { name: "My collection" }).getByRole("button").first().click();
+        await page.getByRole("textbox", { name: "Enter Collection Name" }).fill("My collection edited");
+        await expect(page.getByRole("textbox", { name: "Enter Collection Name" })).toHaveValue("My collection edited");
     });
 });
