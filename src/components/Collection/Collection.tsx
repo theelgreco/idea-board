@@ -89,6 +89,7 @@ export default function Collection({
                     {(isHovered || selected) && isEditable && (
                         <>
                             <MdEdit
+                                role="button"
                                 tabIndex={0}
                                 className="hover:bg-stone-700/50 mr-3"
                                 onClick={toggleEdit}
@@ -99,6 +100,7 @@ export default function Collection({
                                 }}
                             />
                             <MdDelete
+                                role="button"
                                 tabIndex={0}
                                 className="hover:bg-stone-700/50"
                                 onClick={(e) => {
