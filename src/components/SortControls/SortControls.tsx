@@ -32,7 +32,6 @@ export default function SortControls({ order, setOrder, sortByOptions, selectedS
             <hr className="border-l h-full" />
             <Button
                 Icon={order === "asc" ? MdArrowUpward : MdArrowDownward}
-                text=""
                 variant="plain"
                 className="p-2!"
                 onClick={() => (order === "asc" ? setOrder("desc") : setOrder("asc"))}
