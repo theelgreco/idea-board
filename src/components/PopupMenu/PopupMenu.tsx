@@ -25,10 +25,6 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
         setIsOpen(!isOpen);
     }
 
-    function handleContainerClick(e: React.MouseEvent<HTMLDivElement>) {
-        e.stopPropagation();
-    }
-
     useEffect(() => {
         document.addEventListener("click", () => setIsOpen(false));
 
@@ -38,7 +34,7 @@ export default function PopupMenu({ items, selectedItem, Icon, iconPosition, ico
     });
 
     return (
-        <div {...rest} className={clsx(styles.container, rest.className)} onClick={handleContainerClick}>
+        <div {...rest} className={clsx(styles.container, rest.className)} onClick={(e) => e.stopPropagation()}>
             <Button
                 Icon={Icon}
                 iconPosition={iconPosition}
