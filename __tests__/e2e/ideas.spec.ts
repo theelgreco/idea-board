@@ -12,8 +12,10 @@ test.describe("Idea Board E2E", () => {
         const editedIdeaDescription = "worldjwdfnjj";
 
         const newIdeaButton = page.getByRole("button", { name: "New Idea" });
-        const ideaNameElement = page.getByRole("textbox", { name: "Enter idea name" });
-        const ideaDescriptionElement = page.getByRole("textbox", { name: "What's your idea?" });
+        const ideaElement = page.getByRole("article");
+        const ideaNameElement = ideaElement.getByRole("textbox", { name: "Enter idea name" });
+        const ideaDescriptionElement = ideaElement.getByRole("textbox", { name: "What's your idea?" });
+        const deleteIdeaButton = ideaElement.locator("header").getByRole("button");
 
         // Ensure "new idea" button is hidden after being clicked
         await expect(newIdeaButton).toBeVisible();
@@ -48,12 +50,12 @@ test.describe("Idea Board E2E", () => {
         await expect(ideaDescriptionElement).toHaveValue(editedIdeaDescription);
 
         // Should have 1 idea
-        await expect(page.getByRole("article")).toHaveCount(1);
+        await expect(ideaElement).toHaveCount(1);
 
         // Delete idea
-        await page.getByRole("article").locator("header").getByRole("button").click();
+        await deleteIdeaButton.click();
 
         // Should have no ideas
-        await expect(page.getByRole("article")).toHaveCount(0);
+        await expect(ideaElement).toHaveCount(0);
     });
 });
