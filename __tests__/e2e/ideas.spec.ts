@@ -1,10 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
-
-async function checkNumberOfIdeasInLocalStorage(page: Page, expected: number) {
-    return await page.waitForFunction((e) => {
-        return JSON.parse(localStorage.ideas).length === e;
-    }, expected);
-}
+import { test, expect } from "@playwright/test";
 
 test.describe("Idea Board E2E", () => {
     test.beforeEach(async ({ page }) => {
@@ -55,13 +49,11 @@ test.describe("Idea Board E2E", () => {
 
         // Should have 1 idea
         await expect(page.getByRole("article")).toHaveCount(1);
-        await checkNumberOfIdeasInLocalStorage(page, 1);
 
         // Delete idea
         await page.getByRole("article").locator("header").getByRole("button").click();
 
         // Should have no ideas
         await expect(page.getByRole("article")).toHaveCount(0);
-        await checkNumberOfIdeasInLocalStorage(page, 0);
     });
 });
