@@ -42,5 +42,6 @@ test.describe("Collections E2E", () => {
         /* Delete collection */
         await editedCollectionElement.click();
         await editedCollectionDeleteButton.click();
+        await expect(editedCollectionElement).not.toBeAttached();
     });
 });
