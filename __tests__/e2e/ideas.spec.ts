@@ -12,38 +12,46 @@ test.describe("Idea Board E2E", () => {
     });
 
     test("should add, edit, persist, and delete ideas", async ({ page }) => {
-        // Ensure "new idea" button is hidden after being clicked
+        const ideaName = "hello";
+        const ideaDescription = "world";
+        const editedIdeaName = "hellojwfnjff";
+        const editedIdeaDescription = "worldjwdfnjj";
+
         const newIdeaButton = page.getByRole("button", { name: "New Idea" });
+        const ideaNameElement = page.getByRole("textbox", { name: "Enter idea name" });
+        const ideaDescriptionElement = page.getByRole("textbox", { name: "What's your idea?" });
+
+        // Ensure "new idea" button is hidden after being clicked
         await expect(newIdeaButton).toBeVisible();
         await newIdeaButton.click();
         await expect(newIdeaButton).toBeHidden();
 
         // Add name
-        await expect(page.getByRole("textbox", { name: "Enter idea name" })).toBeFocused();
-        await page.getByRole("textbox", { name: "Enter idea name" }).fill("hello");
-        await page.getByRole("textbox", { name: "Enter idea name" }).press("Enter");
-        await expect(page.getByRole("textbox", { name: "Enter idea name" })).toHaveValue("hello");
+        await expect(ideaNameElement).toBeFocused();
+        await ideaNameElement.fill(ideaName);
+        await ideaNameElement.press("Enter");
+        await expect(ideaNameElement).toHaveValue(ideaName);
 
         // Add description
-        await expect(page.getByRole("textbox", { name: "What's your idea?" })).toBeFocused();
-        await page.getByRole("textbox", { name: "What's your idea?" }).fill("world");
-        await page.getByRole("textbox", { name: "What's your idea?" }).press("Shift+Enter");
-        await expect(page.getByRole("textbox", { name: "What's your idea?" })).toHaveValue("world");
+        await expect(ideaDescriptionElement).toBeFocused();
+        await ideaDescriptionElement.fill(ideaDescription);
+        await ideaDescriptionElement.press("Shift+Enter");
+        await expect(ideaDescriptionElement).toHaveValue(ideaDescription);
 
         // Edit name
-        await page.getByRole("textbox", { name: "Enter idea name" }).fill("hellojwfnjff");
-        await page.getByRole("textbox", { name: "Enter idea name" }).press("Enter");
-        await expect(page.getByRole("textbox", { name: "Enter idea name" })).toHaveValue("hellojwfnjff");
+        await ideaNameElement.fill(editedIdeaName);
+        await ideaNameElement.press("Enter");
+        await expect(ideaNameElement).toHaveValue(editedIdeaName);
 
         // Edit description
-        await page.getByRole("textbox", { name: "What's your idea?" }).fill("worldjwdfnjj");
-        await page.getByRole("textbox", { name: "What's your idea?" }).press("Shift+Enter");
-        await expect(page.getByRole("textbox", { name: "What's your idea?" })).toHaveValue("worldjwdfnjj");
+        await ideaDescriptionElement.fill(editedIdeaDescription);
+        await ideaDescriptionElement.press("Shift+Enter");
+        await expect(ideaDescriptionElement).toHaveValue(editedIdeaDescription);
 
         // Reload page and ensure idea is still there
         await page.reload();
-        await expect(page.getByRole("textbox", { name: "Enter idea name" })).toHaveValue("hellojwfnjff");
-        await expect(page.getByRole("textbox", { name: "What's your idea?" })).toHaveValue("worldjwdfnjj");
+        await expect(ideaNameElement).toHaveValue(editedIdeaName);
+        await expect(ideaDescriptionElement).toHaveValue(editedIdeaDescription);
 
         // Should have 1 idea
         await expect(page.getByRole("article")).toHaveCount(1);
