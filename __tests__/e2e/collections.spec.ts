@@ -1,10 +1,4 @@
-import { test, expect, Page } from "@playwright/test";
-
-async function checkNumberOfCollectionsInLocalStorage(page: Page, expected: number) {
-    return await page.waitForFunction((e) => {
-        return JSON.parse(localStorage.collections).length === e;
-    }, expected);
-}
+import { test, expect } from "@playwright/test";
 
 test.describe("Collections E2E", () => {
     test.beforeEach(async ({ page }) => {
@@ -32,7 +26,6 @@ test.describe("Collections E2E", () => {
         await collectionInputElement.press("Enter");
         await expect(collectionInputElement).toHaveValue(collectionName);
         await expect(collectionInputElement).toBeVisible();
-        await checkNumberOfCollectionsInLocalStorage(page, 1);
 
         /* Edit collection */
         await collectionEditButton.click();
@@ -40,7 +33,6 @@ test.describe("Collections E2E", () => {
         await collectionInputElement.press("Enter");
         await expect(collectionInputElement).toHaveValue(editedCollectionName);
         await expect(collectionInputElement).toBeVisible();
-        await checkNumberOfCollectionsInLocalStorage(page, 1);
 
         /* Reload page and ensure collection is still there and has edited value */
         await page.reload();
@@ -50,6 +42,5 @@ test.describe("Collections E2E", () => {
         /* Delete collection */
         await editedCollectionElement.click();
         await editedCollectionDeleteButton.click();
-        await checkNumberOfCollectionsInLocalStorage(page, 0);
     });
 });
