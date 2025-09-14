@@ -12,33 +12,44 @@ test.describe("Collections E2E", () => {
     });
 
     test("should add, edit, persist, and delete collections", async ({ page }) => {
+        const collectionName = "My Collection";
+        const editedCollectionName = "My Edited Collection";
+
         const addCollectionButton = page.getByRole("button", { name: "Add Collection" });
+        const collectionInputElement = page.getByRole("textbox", { name: "Enter Collection Name" });
+        const collectionElement = page.getByRole("button", { name: collectionName });
+        const collectionEditButton = collectionElement.getByRole("button").nth(0);
+        // After editing, the collection will have a new name, so we need a separate locator for the edited collection button
+        const editedCollectionElement = page.getByRole("button", { name: editedCollectionName });
+        const editedCollectionDeleteButton = editedCollectionElement.getByRole("button").nth(1);
+
         await expect(addCollectionButton).toBeEnabled();
         await addCollectionButton.click();
         await expect(addCollectionButton).toBeDisabled();
 
         /* Add collection */
-        page.getByRole("textbox", { name: "Enter Collection Name" }).fill("My collection");
-        await expect(page.getByRole("textbox", { name: "Enter Collection Name" })).toHaveValue("My collection");
-        await page.getByRole("textbox", { name: "Enter Collection Name" }).press("Enter");
-        await expect(page.getByRole("button", { name: "My collection" })).toBeVisible();
+        await collectionInputElement.fill(collectionName);
+        await collectionInputElement.press("Enter");
+        await expect(collectionInputElement).toHaveValue(collectionName);
+        await expect(collectionInputElement).toBeVisible();
         await checkNumberOfCollectionsInLocalStorage(page, 1);
 
         /* Edit collection */
-        await page.getByRole("button", { name: "My collection" }).getByRole("button").nth(0).click();
-        await page.getByRole("textbox", { name: "Enter Collection Name" }).fill("My edited collection");
-        await expect(page.getByRole("textbox", { name: "Enter Collection Name" })).toHaveValue("My edited collection");
-        await page.getByRole("textbox", { name: "Enter Collection Name" }).press("Enter");
-        await expect(page.getByRole("button", { name: "My edited collection" })).toBeVisible();
+        await collectionEditButton.click();
+        await collectionInputElement.fill(editedCollectionName);
+        await collectionInputElement.press("Enter");
+        await expect(collectionInputElement).toHaveValue(editedCollectionName);
+        await expect(collectionInputElement).toBeVisible();
         await checkNumberOfCollectionsInLocalStorage(page, 1);
 
-        /* Reload page and ensure collection is still there */
+        /* Reload page and ensure collection is still there and has edited value */
         await page.reload();
-        await expect(page.getByRole("button", { name: "My edited collection" })).toBeVisible();
+        await expect(editedCollectionElement).toBeVisible();
+        await expect(collectionInputElement).toHaveValue(editedCollectionName);
 
         /* Delete collection */
-        await page.getByRole("button", { name: "My edited collection" }).click();
-        await page.getByRole("button", { name: "My edited collection" }).getByRole("button").nth(1).click();
+        await editedCollectionElement.click();
+        await editedCollectionDeleteButton.click();
         await checkNumberOfCollectionsInLocalStorage(page, 0);
     });
 });
