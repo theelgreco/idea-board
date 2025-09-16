@@ -1,6 +1,6 @@
 # Idea Board - ClearScore FED Test
 
-This is my submission for the ClearScore Front-End Test. (Will add some more info later)
+This is my submission for the ClearScore Front-End Test.
 
 View the live project at: https://idea-board-eight.vercel.app/
 
