@@ -104,19 +104,18 @@ export default function CollectionList({
                     selected={!selectedCollection}
                     onClick={() => setSelectedCollection(null)}
                 />
-                {collections &&
-                    collections.map((collection) => {
-                        return (
-                            <Collection
-                                key={collection.id}
-                                collection={collection}
-                                selected={selectedCollection?.id === collection.id}
-                                onClick={() => setSelectedCollection(collection)}
-                                onEdit={(name) => updateCollection(name, collection.id)}
-                                onDelete={() => removeCollection(collection.id)}
-                            />
-                        );
-                    })}
+                {collections?.map((collection) => {
+                    return (
+                        <Collection
+                            key={collection.id}
+                            collection={collection}
+                            selected={selectedCollection?.id === collection.id}
+                            onClick={() => setSelectedCollection(collection)}
+                            onEdit={(name) => updateCollection(name, collection.id)}
+                            onDelete={() => removeCollection(collection.id)}
+                        />
+                    );
+                })}
                 {/* New (blank) collection */}
                 {isAddingCollection && <Collection isNew={true} onCreate={(name) => handleOnCreate(name)} />}
             </div>
