@@ -34,21 +34,20 @@ export default function IdeaBoardContent({
                     }}
                 />
             )}
-            {ideas &&
-                ideas.map((idea) => (
-                    <IdeaCard
-                        key={idea.id}
-                        idea={idea}
-                        autoFocusDescription={idea.id === lastAddedIdeaId} // Autofocuses the description on a newly added idea
-                        onSave={(data) => {
-                            // Only save if there is something to save
-                            if (data.name || data.description) {
-                                editIdea(data, { id: idea.id });
-                            }
-                        }}
-                        onDelete={() => removeIdea({ id: idea.id })}
-                    />
-                ))}
+            {ideas?.map((idea) => (
+                <IdeaCard
+                    key={idea.id}
+                    idea={idea}
+                    autoFocusDescription={idea.id === lastAddedIdeaId} // Autofocuses the description on a newly added idea
+                    onSave={(data) => {
+                        // Only save if there is something to save
+                        if (data.name || data.description) {
+                            editIdea(data, { id: idea.id });
+                        }
+                    }}
+                    onDelete={() => removeIdea({ id: idea.id })}
+                />
+            ))}
         </div>
     );
 }
